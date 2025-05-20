@@ -3,3 +3,6 @@
 /Sudoku-Web-APP-PY3/bin
 Sudoku-Web-APP-PY3/Sudoku-Web-APP-PY3.csproj.user
 
+# Los de firebase studio.
+.idx/dev.nix
+.vscode/settings.json
