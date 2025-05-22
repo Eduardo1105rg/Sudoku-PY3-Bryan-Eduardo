@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36109.1 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SudokuPY3", "SudokuPY3.csproj", "{14BD57DD-5715-4366-9707-3D3C0A1ED283}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{14BD57DD-5715-4366-9707-3D3C0A1ED283}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14BD57DD-5715-4366-9707-3D3C0A1ED283}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14BD57DD-5715-4366-9707-3D3C0A1ED283}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14BD57DD-5715-4366-9707-3D3C0A1ED283}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E26EA210-E73D-4D56-84AA-A9CA9C1014E5}
+	EndGlobalSection
+EndGlobal
