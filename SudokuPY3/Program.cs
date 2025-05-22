@@ -1,4 +1,8 @@
+using SudokuPY3.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<PrologServices>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
