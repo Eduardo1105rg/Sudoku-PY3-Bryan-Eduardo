@@ -37,19 +37,35 @@ namespace SudokuPY3.Controllers
             return View();
         }
 
-        public List<List<int>> solicitarMatriz()
+        [HttpPost]
+        public IActionResult solicitarMatriz([FromBody] InciarJuegoRequest tamano_request)
         {
-            List<List<int>> matrizSudoku = _prologService.ObtenerMatrizSudoku();
-            return matrizSudoku;
+            List<List<int>> matrizSudoku = _prologService.ObtenerMatrizSudoku(tamano_request.TamanoMatriz);
+            //var matrizSudoku = _prologService.ObtenerMatrizSudoku(tamano_request.TamanoMatriz);
+            //_logger.LogInformation(matrizSudoku);
+            //_logger.LogInformation($"Cantidad de filas en la matriz: {matrizSudoku.Count}");
+            //foreach (var fila in matrizSudoku)
+            //{
+            //    _logger.LogInformation(string.Join(", ", fila));
+            //}
+            return Ok(matrizSudoku); //Json(new { matriz = matrizSudoku });
         }
 
 
 
 
-        public IActionResult Privacy()
+
+
+        // Estos serian las modelos de datos:
+
+        public class InciarJuegoRequest
         {
-            return View();
+
+            public int TamanoMatriz { get; set; }
+
         }
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

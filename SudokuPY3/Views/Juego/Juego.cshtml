@@ -1,6 +1,50 @@
 ﻿@{
     ViewData["Title"] = "Juego page";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Esta es una pagina de prueba para el juego.</p>
+<link href="~/css/juegostyle.css" rel="stylesheet" />
+
+
+@* <div id="modal">
+    <h2>Seleccione el tamaño del tablero</h2>
+    <button onclick="iniciarJuego(9)">Tablero 9x9</button>
+    <button onclick="iniciarJuego(16)">Tablero 16x16</button>
+</div> *@
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+
+        <div class="recuado-interior-modal">
+
+            <label> Seleccione el tamaño del tablero:</label>
+
+            <div class="div-botones-tamano">
+
+                <button onclick="iniciarJuego(9)">Tablero 9x9</button>
+                <button onclick="iniciarJuego(16)">Tablero 16x16</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="div-principal">
+
+    <h1>Sudoku</h1>
+
+    @*Este seria el div para donde estarian las opciones a realizar.*@
+    <div></div>
+
+    @*Este seria el div del tablero*@
+    <div id="tablero-container">
+        <table id="tablero"></table>
+    </div>
+
+</div>
+
+
+
+<script src="~/js/JuegoScript.js"></script>

@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 
 namespace SudokuPY3.Services
 {
@@ -77,23 +79,55 @@ namespace SudokuPY3.Services
         }
 
 
-        public List<List<int>> ObtenerMatrizSudoku()
+        //public List<List<int>> ObtenerMatrizSudoku(int tamano)
+        //{
+        //    // Consulta a Prolog para generar la matriz
+        //    string consulta = "sudoku_con_pistas(MatrizConCeros, MatrizResuelta), write(MatrizConCeros), nl, halt.";
+        //    string resultado = EnviarConsulta(consulta);
+        //    //Console.WriteLine("Respuesta: ");
+
+        //    //Console.WriteLine(resultado);
+        //    // Convertir la respuesta de Prolog en una lista de listas en C#
+        //    resultado = resultado.Replace("[", "").Replace("]", "").Trim();
+        //    Console.WriteLine(resultado);
+        //    var listas = resultado.Split(',')
+        //                          .Select(sublista => sublista.Split(' ')
+        //                          .Select(int.Parse).ToList())
+        //                          .ToList();
+
+        //    return listas;
+        //}
+
+
+
+        public List<List<int>> ObtenerMatrizSudoku(int tamano)
         {
             // Consulta a Prolog para generar la matriz
             string consulta = "sudoku_con_pistas(MatrizConCeros, MatrizResuelta), write(MatrizConCeros), nl, halt.";
             string resultado = EnviarConsulta(consulta);
-            //Console.WriteLine("Respuesta: ");
 
-            //Console.WriteLine(resultado);
-            // Convertir la respuesta de Prolog en una lista de listas en C#
-            resultado = resultado.Replace("[", "").Replace("]", "").Trim();
-            var listas = resultado.Split(',')
-                                  .Select(sublista => sublista.Split(' ')
-                                  .Select(int.Parse).ToList())
-                                  .ToList();
+            Console.WriteLine("Respuesta de Prolog: " + resultado);
 
-            return listas;
+            resultado = resultado.Trim('[', ']');
+
+           
+            List<List<int>> matrizSudoku = resultado
+                .Split("],[")
+                .Select(sublista => sublista
+                    .Split(',') 
+                    .Select(num => int.Parse(num.Trim())) 
+                    .ToList()
+                )
+                .ToList();
+
+            Console.WriteLine($"Cantidad de filas en la matriz: {matrizSudoku.Count}");
+
+
+            return matrizSudoku;
         }
+
+
+
 
 
         // Para el envio de un movimiento.
