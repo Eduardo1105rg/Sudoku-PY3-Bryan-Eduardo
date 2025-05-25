@@ -160,9 +160,14 @@ async function solicitar_matriz(tamano) {
         const data = await response.json();
         console.log("Matriz recibida:", data);
 
+        let matrizResuelta = data.MatrizResuelta;
+        let matrizJuego = data.MatrizJuego;
+
+
         // Guardamos los datos del tamaño y la matriz para usarlos mas tarde.
-        sessionStorage.setItem("TableroOriginal", JSON.stringify(data));
-        sessionStorage.setItem("TableroVolatil", JSON.stringify(data));
+        sessionStorage.setItem("MatrizOrigen", JSON.stringify(matrizResuelta));
+        sessionStorage.setItem("TableroOriginal", JSON.stringify(matrizJuego));
+        sessionStorage.setItem("TableroVolatil", JSON.stringify(matrizJuego));
         sessionStorage.setItem("SizeTablero", tamano);
 
 
@@ -269,7 +274,7 @@ function generarOpcionesSelect(size) {
     columnaSelect.innerHTML = "";
     valorSelect.innerHTML = "";
 
-    for (let i = 0; i < size; i++) {
+    for (let i = 1; i <= size; i++) {
         filaSelect.innerHTML += `<option value="${i}">${i}</option>`;
         columnaSelect.innerHTML += `<option value="${i}">${i}</option>`;
     }
@@ -321,10 +326,11 @@ async function enviarMovimiento(fila, columna, valor) {
 
     try {
         let tableroVolatil = JSON.parse(sessionStorage.getItem("TableroVolatil"));
+        let matrizOrigen = JSON.parse(sessionStorage.getItem("MatrizOrigen"));
 
         console.log("Tablero a enviar: ", tableroVolatil, "\n");
 
-        const dataToSend = JSON.stringify({ Fila: fila, Columna: columna, Valor: valor, Tablero: tableroVolatil });
+        const dataToSend = JSON.stringify({ Fila: fila, Columna: columna, Valor: valor, Tablero: tableroVolatil, MatrizOrigen: matrizOrigen });
         console.log("Datos a enviar de la jugada:", dataToSend);
 
         const response = await fetch('/Juego/jugadaSudoku', {

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SudokuPY3.Models;
 using SudokuPY3.Services;
@@ -21,11 +22,11 @@ namespace SudokuPY3.Controllers
         {
 
             //List<List<int>> matrizSudoku = _prologService.ObtenerMatrizSudoku();
-            string matrizSudoku2 = _prologService.EnviarConsulta("sudoku_con_pistas(MatrizConCeros, MatrizResuelta), write(MatrizConCeros), nl, halt.");
+            //string matrizSudoku2 = _prologService.EnviarConsulta("sudoku_con_pistas(MatrizConCeros, MatrizResuelta), write(MatrizConCeros), nl, halt.");
             //string resultado = _prologService.EnviarConsulta("sudoku(Rows, M), writeln(M), nl, halt.");
             //string resultado = _prologService.ObtenerErroresProlog();
 
-            _logger.LogInformation(matrizSudoku2);
+            //_logger.LogInformation(matrizSudoku2);
 
             //_logger.LogInformation($"Cantidad de filas en la matriz: {matrizSudoku.Count}");
 
@@ -33,14 +34,20 @@ namespace SudokuPY3.Controllers
             //{
             //    _logger.LogInformation(string.Join(", ", fila));
             //}
-
+            _prologService.ObtenerMatrizSudokuV2(9);
             return View();
         }
 
         [HttpPost]
         public IActionResult solicitarMatriz([FromBody] InciarJuegoRequest tamano_request)
         {
-            List<List<int>> matrizSudoku = _prologService.ObtenerMatrizSudoku(tamano_request.TamanoMatriz);
+            //List<List<int>> matrizSudoku = _prologService.ObtenerMatrizSudoku(tamano_request.TamanoMatriz);
+
+            List<List<List<int>>> matrizSudoku = _prologService.ObtenerMatrizSudokuV2(tamano_request.TamanoMatriz);
+
+            List<List<int>> matrizResuelta = matrizSudoku[0]; 
+            List<List<int>> matrizJuego = matrizSudoku[1];
+
             //var matrizSudoku = _prologService.ObtenerMatrizSudoku(tamano_request.TamanoMatriz);
             //_logger.LogInformation(matrizSudoku);
             //_logger.LogInformation($"Cantidad de filas en la matriz: {matrizSudoku.Count}");
@@ -48,7 +55,7 @@ namespace SudokuPY3.Controllers
             //{
             //    _logger.LogInformation(string.Join(", ", fila));
             //}
-            return Ok(matrizSudoku); //Json(new { matriz = matrizSudoku });
+            return Json(new { MatrizResuelta = matrizResuelta, MatrizJuego = matrizJuego }); ; //Json(new { matriz = matrizSudoku });
         }
 
 
@@ -64,6 +71,8 @@ namespace SudokuPY3.Controllers
             int valor = data_resquest.Valor;
 
             List<List< int >> matrizRecibida = data_resquest.Tablero;
+
+            List<List<int>> matrizOrigen = data_resquest.MatrizOrigen;
 
             //_logger.LogInformation($"Cantidad de filas en la matriz: {matrizRecibida.Count}");
             //foreach (var fila2 in matrizRecibida)
@@ -96,6 +105,8 @@ namespace SudokuPY3.Controllers
             public int Valor { get; set; }
 
             public List<List<int>> Tablero { get; set; }
+
+            public List<List<int>> MatrizOrigen { get; set; }
 
         }
 

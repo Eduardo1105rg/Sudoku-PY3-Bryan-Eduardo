@@ -1,13 +1,11 @@
-% Sudoku.pl
-
 :- use_module(library(clpfd)). % Libreria para el sudoku
 :- use_module(library(random)). % Libreria para los numeros aleatorios
 
- % sudoku_con_pistas(S, R),     
- %  writeln('Matriz Resuelta:'), maplist(writeln, R),
- %  writeln('Matriz con ceros (pistas):'), maplist(writeln, S),
- %  hacer_sugerencia(S, R, S2, S2Filas),
- %  writeln('Matriz con sugerencia aplicada:'), maplist(writeln, S2Filas).
+
+prueba :-
+    sudoku_con_pistas(S, R),     
+    writeln('Matriz Resuelta:'), maplist(writeln, R),
+    writeln('Matriz con ceros (pistas):'), maplist(writeln, S).
 
 % Asi se prueba sudoku_con_pistas(S), maplist(writeln, S).
 
@@ -65,11 +63,18 @@ generar_sugerencia([H|T], [H1|T1], [H|T2], Posicion) :-
     generar_sugerencia(T, T1, T2, Pos1).
 
 
-% Esto es para que me dé las posiciones que voy a cambiar o sea las que voy a dejar como 0
 posicion_aleatoria(Pos) :-
-    random_between(1, 9, F),
-    random_between(1, 9, C),
-    Pos is (F - 1) * 9 + C.
+    posicion_aleatoria(Pos, []).  % Inicia con lista vacía de posiciones usadas
+
+posicion_aleatoria(Pos, Usadas) :-
+    random_between(0, 8, F),      
+    random_between(0, 8, C),      
+    Pos is F * 9 + C,             
+    \+ member(Pos, Usadas).       
+
+% Caso recursivo: si la posición ya está usada, reintenta
+posicion_aleatoria(Pos, Usadas) :-
+    posicion_aleatoria(Pos, Usadas).  % Backtracking para generar otra posición
 
 % Esta es la regla para poner 0 en la posicion que indicamos
 % En general en nuevo es el valor o sea 0 y en Pos donde vamos a querer que se cambie el valor lo que hace es 
@@ -82,13 +87,16 @@ actualizar_lista([H|T], Pos, Nuevo, [H|Resto]) :-
 
 
 % Aqui es donde haremos que se inserten los 0 dependiendo de la cantidad de pistas que se tengan
-insertar_pistas(0, ListaSudoku, ListaSudoku).
-insertar_pistas(N, ListaSudoku, Resultado) :-
-    N > 0,
-    posicion_aleatoria(Pos),
-    actualizar_lista(ListaSudoku, Pos, 0, ListaSudokuActualizado),
-    N1 is N - 1,
-    insertar_pistas(N1, ListaSudokuActualizado, Resultado).
+insertar_pistas(N, Lista, Resultado) :-
+    insertar_pistas(N, Lista, [], Resultado). % Llamamos a la que guarda las posiciones usadas
+
+insertar_pistas(N, Lista, Usadas, Resultado) :-
+    ( N = 0 -> Resultado = Lista
+    ; posicion_aleatoria(Pos, Usadas),
+      actualizar_lista(Lista, Pos+1, 0, ListaActualizada),
+      N1 is N - 1,
+      insertar_pistas(N1, ListaActualizada, [Pos|Usadas], Resultado)
+    ).
 
 % Hacemos la lista como una matriz pues cortamos por fila y las hacemos sublistas con 9 elementos
 crear_matriz([], []).
@@ -102,6 +110,7 @@ crear_matriz(Lista, [Fila|Resto]) :-
 sudoku_con_pistas(MatrizSudokuConCeros, MatrizResuelta) :-
     sudoku(MatrizResuelta, ListaSudoku),
     asignar_pistas(N),
+    writeln('Número de pistas generadas (N):'), writeln(N),
     insertar_pistas(N, ListaSudoku, ListaSudokuConCeros),
     crear_matriz(ListaSudokuConCeros, MatrizSudokuConCeros).
 
@@ -128,12 +137,51 @@ revisa_matriz([H|T], [He|Ta]) :-
 
 % Esto es para cuando el usuario me de la fila y la columna calcular la posicion en la que voy a necesitar que se cambie
 recibe_posicion(F,C, PosicionU):-
-    PosicionU is (F - 1) * 9 + C.
+    PosicionU is F * 9 + C.
 
-% Aqui lo que hago es que sustituyo en la lista plana el valor que el usuario me vaya a pasar con su respectivo digito
-% Aqui la regla es que solo se puedan cambiar posiciones que esten como un cero
-insertar_en_lista([0|T], 1, Nuevo, [Nuevo|T]). 
-insertar_en_lista([H|T], Pos, Nuevo, [H|Resto]) :-
-    Pos > 1,
-    Pos1 is Pos - 1,
-    insertar_en_lista(T, Pos1, Nuevo, Resto).
+
+
+
+% Aqui lo trabajo en posicion que comienza en 1 o sea fila 1 columna 1
+
+puede_insertar(Matriz, Fila, Col, Valor, Resultado) :-
+    between(1, 9, Fila), between(1, 9, Col),     
+    between(1, 9, Valor),                         
+    flatten(Matriz, ListaPlana),                  
+    Pos is (Fila-1)*9 + (Col-1),                 
+    
+
+    (   nth0(Pos, ListaPlana, 0)                 
+    ->  (   var(Resultado)                       
+         -> intercambio_valor(Pos, ListaPlana, Valor, ListaModificada),
+            crear_matriz(ListaModificada, Resultado)
+         ;  Resultado == true                    
+        )
+    ;   false                                    
+    ).
+
+
+% Esto todavia no lo usamos 
+asignar_valor(Lista, Fila, Col, Valor, ListaModificada) :-
+    between(1, 9, Fila), between(1, 9, Col),      
+    Pos is (Fila-1)*9 + (Col-1),                  
+    intercambio_valor(Pos, Lista, Valor, ListaModificada). 
+
+
+% Entradas: Indice, Lista, ValorCambio, ListaCambiada
+% Salidas: la lista cambiada
+% Funcionamiento: En si agarra una lista y dependiendo del indice las corta por la mitad dejando solo al indice por fuera
+% de forma que luego con la nueva lista agrega los dos que corto mas el nuevo valor de forma que se agrega a esa nueva lista
+% como si fuera un reemplazo 
+% Restricciones: No aplica
+intercambio_valor(Indice, Lista, ValorCambio, ListaCambiada) :-
+    length(Sublista, Indice),
+    append(Sublista, [_|Resto], Lista),
+    append(Sublista, [ValorCambio|Resto], ListaCambiada).
+
+
+
+pistas_en_matriz(ListaSudoku, MatrizSudokuConCeros) :-
+    asignar_pistas(N),
+    insertar_pistas(N, ListaSudoku, ListaSudokuConCeros),
+    crear_matriz(ListaSudokuConCeros, MatrizSudokuConCeros).
