@@ -52,7 +52,28 @@ namespace SudokuPY3.Controllers
         }
 
 
+        [HttpPost]
+        public JsonResult jugadaSudoku([FromBody] DatosMovimientoRequest data_resquest)
+        {
+            int fila = data_resquest.Fila;
 
+            //_logger.LogInformation($"Numero de la fila de la jugada: {fila}");
+
+            int columna = data_resquest.Columna;
+
+            int valor = data_resquest.Valor;
+
+            List<List< int >> matrizRecibida = data_resquest.Tablero;
+
+            //_logger.LogInformation($"Cantidad de filas en la matriz: {matrizRecibida.Count}");
+            //foreach (var fila2 in matrizRecibida)
+            //{
+            //    _logger.LogInformation(string.Join(", ", fila2));
+            //}
+
+            return Json(new { matriz = "matrizSudoku" });
+
+        }
 
 
 
@@ -62,6 +83,19 @@ namespace SudokuPY3.Controllers
         {
 
             public int TamanoMatriz { get; set; }
+
+        }
+
+
+        public class DatosMovimientoRequest
+        {
+            public int Fila { get; set; }
+
+            public int Columna { get; set; }
+
+            public int Valor { get; set; }
+
+            public List<List<int>> Tablero { get; set; }
 
         }
 

@@ -234,6 +234,16 @@ function generarTablero(size, matriz) {
     }
 }
 
+/**
+ * Nombre:
+ * 
+ * Descripcion:
+ * 
+ * Entradas:
+ * 
+ * Salidas:
+ * 
+ */
 function seleccionarCelda(fila, columna) {
     let celda = document.getElementById(`celda-${fila}-${columna}`);
     let nuevoValor = prompt("Ingrese un número:");
@@ -292,7 +302,64 @@ function realizarMovimiento() {
     let celda = document.getElementById(`celda-${fila}-${columna}`);
     celda.innerText = valor;
 
+    enviarMovimiento(fila, columna, valor);
+
     console.log(`Movimiento realizado en (${fila}, ${columna}): ${valor}`);
+}
+
+/**
+ * Nombre:
+ * 
+ * Descripcion:
+ * 
+ * Entradas:
+ * 
+ * Salidas:
+ * 
+ */
+async function enviarMovimiento(fila, columna, valor) {
+
+    try {
+        let tableroVolatil = JSON.parse(sessionStorage.getItem("TableroVolatil"));
+
+        console.log("Tablero a enviar: ", tableroVolatil, "\n");
+
+        const dataToSend = JSON.stringify({ Fila: fila, Columna: columna, Valor: valor, Tablero: tableroVolatil });
+        console.log("Datos a enviar de la jugada:", dataToSend);
+
+        const response = await fetch('/Juego/jugadaSudoku', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: dataToSend
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Datos recibido de la jugada:", data);
+
+        //// Guardamos los datos del tamaño y la matriz para usarlos mas tarde.
+
+        //sessionStorage.setItem("TableroVolatil", JSON.stringify(data));
+
+
+
+        //// Recuperar el tamaño del tablero.
+        //let tamano = parseInt(sessionStorage.getItem("SizeTablero"), 10);
+
+        //// Renderizar la matriz.
+        //generarTablero(tamano, data);
+
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+    }
+
+
+
 }
 
 /**
