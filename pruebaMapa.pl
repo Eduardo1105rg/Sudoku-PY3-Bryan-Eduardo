@@ -179,3 +179,9 @@ intercambio_valor(Indice, Lista, ValorCambio, ListaCambiada) :-
     append(Sublista, [_|Resto], Lista),
     append(Sublista, [ValorCambio|Resto], ListaCambiada).
 
+
+
+pistas_en_matriz(ListaSudoku, MatrizSudokuConCeros) :-
+    asignar_pistas(N),
+    insertar_pistas(N, ListaSudoku, ListaSudokuConCeros),
+    crear_matriz(ListaSudokuConCeros, MatrizSudokuConCeros).
