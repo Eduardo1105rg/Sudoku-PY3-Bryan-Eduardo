@@ -185,3 +185,36 @@ pistas_en_matriz(ListaSudoku, MatrizSudokuConCeros) :-
     asignar_pistas(N),
     insertar_pistas(N, ListaSudoku, ListaSudokuConCeros),
     crear_matriz(ListaSudokuConCeros, MatrizSudokuConCeros).
+
+
+
+
+
+verifica_posicion(Fila, Col, Valor, ListaConCeros) :-
+    between(1, 9, Fila),
+    between(1, 9, Col),
+    between(1, 9, Valor),
+    Indice is (Fila - 1) * 9 + (Col - 1),
+    nth0(Indice, ListaConCeros, PosicionValo),
+    (PosicionValo =\= 0 -> fail ; true).
+
+
+
+cantidad_errores([], [], 0).
+cantidad_errores([CZ|TL], [CZ2|TL2], C) :-
+    ( CZ2 =\= 0, CZ2 =\= CZ ->
+        cantidad_errores(TL, TL2, C1),
+        C is C1 + 1
+    ;
+        cantidad_errores(TL, TL2, C)
+    ).
+
+
+cantidad_vacios([], 0).
+cantidad_vacios([CZ|TL], C) :-
+    ( CZ =:= 0 ->
+        cantidad_vacios(TL, C1),
+        C is C1 + 1
+    ;
+        cantidad_vacios(TL, C)
+    ).
