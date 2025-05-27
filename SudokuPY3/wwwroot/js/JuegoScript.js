@@ -73,7 +73,12 @@ function reinicarJuego() {
  * 
  */
 async function verSugerencias() {
+    let matrizOrigen = JSON.parse(sessionStorage.getItem("MatrizOrigen"));
 
+    // Recuperar el tamaño del tablero.
+    let tamano = parseInt(sessionStorage.getItem("SizeTablero"), 10);
+
+    generarTablero(tamano, matrizOrigen);
 }
 
 
@@ -158,10 +163,15 @@ async function solicitar_matriz(tamano) {
         }
 
         const data = await response.json();
-        console.log("Matriz recibida:", data);
+        console.log("Datos recibidos en la consulta:", data);
 
-        let matrizResuelta = data.MatrizResuelta;
-        let matrizJuego = data.MatrizJuego;
+        let matrizResuelta = data.matrizResuelta;
+
+        //console.log("Ttablero resuelto: ", matrizResuelta);
+
+        let matrizJuego = data.matrizJuego;
+        //console.log("Ttablero resuelto: ", matrizJuego);
+
 
 
         // Guardamos los datos del tamaño y la matriz para usarlos mas tarde.
@@ -171,14 +181,14 @@ async function solicitar_matriz(tamano) {
         sessionStorage.setItem("SizeTablero", tamano);
 
 
-        let tableroOrigen = sessionStorage.getItem("TableroOriginal");
-        console.log("Tablero: ", tableroOrigen);
+        //let tableroOrigen = sessionStorage.getItem("TableroOriginal");
+        //console.log("Tablero: ", tableroOrigen);
 
         // Agregar las opciones al select.
         generarOpcionesSelect(tamano);
 
         // Renderizar la matriz.
-        generarTablero(tamano,data);
+        generarTablero(tamano, matrizJuego);
 
     } catch (error) {
         console.error('Error en la solicitud:', error);

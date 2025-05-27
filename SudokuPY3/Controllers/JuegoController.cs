@@ -34,7 +34,7 @@ namespace SudokuPY3.Controllers
             //{
             //    _logger.LogInformation(string.Join(", ", fila));
             //}
-            _prologService.ObtenerMatrizSudokuV2(9);
+            //_prologService.ObtenerMatrizSudokuV2(9);
             return View();
         }
 

@@ -9,6 +9,10 @@ namespace SudokuPY3.Services
 
         private Process prolog;
 
+        private List<int> TableroOrigen;
+
+        private List<int> TableroIncial;
+
         public PrologServices()
         {
             IniciarProlog();
@@ -111,7 +115,7 @@ namespace SudokuPY3.Services
             string consulta = "sudoku(MatrizResuelta, ListaResuelta), write(MatrizResuelta), nl, halt.";
             string resultado = EnviarConsulta(consulta);
 
-            //Console.WriteLine("Matriz Completa: " + resultado);
+            Console.WriteLine("Matriz Completa: " + resultado);
 
             resultado = resultado.Trim('[', ']');
 
@@ -149,8 +153,14 @@ namespace SudokuPY3.Services
                 )
                 .ToList();
 
+            List<int> listaSudokuJuego = matrizSudokuJuego.SelectMany(sublista => sublista).ToList();
 
-            return [matrizSudokuResuelta];
+            // Esto seria para almacenar los datos de las matrices en la clase.
+            this.TableroOrigen = listaSudoku;
+
+            this.TableroIncial = listaSudokuJuego;
+
+            return [matrizSudokuResuelta, matrizSudokuJuego];
         }
 
 
@@ -174,6 +184,41 @@ namespace SudokuPY3.Services
         // Pasar: CantidadDeErrores, CantidadDeVacios| Si  CantidadDeErrores = 0 y CantidadDeVacios = 0 => Ya se finalizo. Caso contrario no ha finalizado.
 
         // Si se decide hacer toda las consultas a la vez, entonces devolver una lista que tenga: [CantErrores, CantVacios, Finalizado]
+
+        void verificarMovimiento(int fila, int columna, int valor, List<List<int>> tableroEnJuego)
+        {
+
+            // Lo primero es verificar si se puede agregar ese dato en la posicion indicada.
+            string listaConCerosString = "[" + string.Join(",", TableroIncial) + "]";
+            string consultaVerificacion = $"verifica_posicion({fila}, {columna}, {valor}, {listaConCerosString}), write(Valido), nl, halt.";
+            string respuestaVerificacion = EnviarConsulta(consultaVerificacion);
+            Console.WriteLine($"Verificación del movimiento: {respuestaVerificacion}");
+
+            if (!respuestaVerificacion.Contains("fail"))
+            {
+                // Aqui se deberia de insertar un valor en la posicion indicada por el usuario.
+            }
+
+            // >> En caso de hacer todas en unos solo todas estas partes deberan quitarse.
+
+            // Pasar el tablero en juego a una lista
+            List<int> listaTableroEnJuego = tableroEnJuego.SelectMany(sublista => sublista).ToList();
+            string listaTableroJuegoString= "[" + string.Join(",", listaTableroEnJuego) + "]";
+
+            // Aqui seria para optener la cantidad de fallos que hay.
+            string consultaErrores = $"cantidad_errores({TableroOrigen}, {listaTableroJuegoString}, CantErrores), write(CantErrores), nl, halt.";
+            string respuestaErrores = EnviarConsulta(consultaErrores);
+            int cantidadErrores = int.Parse(respuestaErrores.Trim());
+
+            // Aqui seria para optener la cantidad de elementos vacios (Casillas con ceros).
+            string consultaVacios = $"cantidad_vacios({listaTableroJuegoString}, CantVacios), write(CantVacios), nl, halt.";
+            string respuestaVacios = EnviarConsulta(consultaVacios);
+            int cantidadVacios = int.Parse(respuestaVacios.Trim());
+
+            // Aqui seria la consulta para ver si ya se termino el juego.
+
+        }
+
 
 
         public string VerificarCargaArchivo()
