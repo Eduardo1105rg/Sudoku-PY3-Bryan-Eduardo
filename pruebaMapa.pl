@@ -218,3 +218,8 @@ cantidad_vacios([CZ|TL], C) :-
     ;
         cantidad_vacios(TL, C)
     ).
+
+
+final_sudoku(CantidadErrores, CantidadVacios) :-
+    CantidadErrores =:= 0,
+    CantidadVacios =:= 0.
