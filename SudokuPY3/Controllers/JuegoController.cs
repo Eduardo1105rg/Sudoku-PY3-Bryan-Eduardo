@@ -58,8 +58,19 @@ namespace SudokuPY3.Controllers
             //}
             var datosEnvio = _prologService.verificarMovimiento(fila, columna, valor, matrizRecibida);
 
+            //_prologService.OptenerSugerencia();
+
             return datosEnvio;//Json(new { matriz = "matrizSudoku" });
 
+        }
+
+        [HttpGet]
+        public JsonResult SolicitarSugerencias()
+        {
+
+            List<List<int>> matriz_con_sugerencias = _prologService.OptenerSugerencia();
+
+            return Json(new { MatrizConSugerencias = matriz_con_sugerencias });
         }
 
 

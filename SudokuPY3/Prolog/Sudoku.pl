@@ -114,19 +114,46 @@ sudoku_con_pistas(MatrizSudokuConCeros, MatrizResuelta) :-
     insertar_pistas(N, ListaSudoku, ListaSudokuConCeros),
     crear_matriz(ListaSudokuConCeros, MatrizSudokuConCeros).
 
-% Ahora, para hacer la sugerencia (ejemplo):
-hacer_sugerencia(MatrizSudokuConCeros, MatrizSudokuSolucion, MatrizSudokuActualizado, MatrizSudokuActualizadoDividido) :-
-    append(MatrizSudokuConCeros, ListaSudokuConCeros),  % Aplanar la matriz
-    append(MatrizSudokuSolucion, ListaSudokuSolucion), % Aplanar la solución
-    asignar_sugerencia(ListaSudokuConCeros, Pos),
-    Pos1 is Pos + 1,
-    generar_sugerencia(ListaSudokuConCeros, ListaSudokuSolucion, ListaSudokuActualizado, Pos1),
-    crear_matriz(ListaSudokuActualizado, MatrizSudokuActualizadoDividido),
-    MatrizSudokuActualizado = MatrizSudokuActualizadoDividido.
 
+% ====== Aqui empeiza la actualizacion de las funcionalidad de sugerencias.
+%Ejemplo de prueba hacer_sugerencia([0,3,0,5,0], [1,3,2,5,4], LActualizado), writeln(LActualizado)
 
+seleccionar_posicion_aleatoria([H|T], Pos) :-  
+    random_member(Pos, [H|T]).
+seleccionar_posicion_aleatoria([], _) :-      
+    fail.
 
+encontrar_posiciones_ceros(Lista, PosicionesCeros) :-
+    findall(
+        Index,
+        (nth0(Index, Lista, Value), Value =:= 0),
+        PosicionesCeros
+    ).
 
+hacer_sugerencia(ListaConCeros, ListaSolucion, ListaActualizado, MatrizActualizada) :-
+    encontrar_posiciones_ceros(ListaConCeros, PosicionesCeros),
+    seleccionar_posicion_aleatoria(PosicionesCeros, Pos),
+    reemplazar_valor_en_posicion(ListaConCeros, ListaSolucion, Pos, ListaActualizado),
+    crear_matriz(ListaActualizado, MatrizActualizada).
+
+encontrar_posiciones_ceros(Lista, Posiciones) :-
+    findall(Index, (nth0(Index, Lista, 0)), Posiciones).
+
+seleccionar_posicion_aleatoria(Posiciones, Pos) :-
+    random_member(Pos, Posiciones).
+
+reemplazar_valor_en_posicion(ListaConCeros, ListaSolucion, Pos, ListaActualizado) :-
+    nth0(Pos, ListaSolucion, Valor),
+    Valor \= 0,        
+    reemplazar_en_lista(ListaConCeros, Pos, Valor, ListaActualizado).
+
+reemplazar_en_lista([_|T], 0, NuevoValor, [NuevoValor|T]).
+reemplazar_en_lista([H|T], Pos, NuevoValor, [H|T2]) :-
+    Pos > 0,
+    Pos1 is Pos - 1,
+    reemplazar_en_lista(T, Pos1, NuevoValor, T2).
+
+% ========== Hasta aqui llega la funciones agregadas a la actualizacion de las sujerencias.
 
 revisa_matriz([], []).
 revisa_matriz([H|T], [He|Ta]) :-

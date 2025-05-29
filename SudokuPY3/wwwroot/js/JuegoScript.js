@@ -80,12 +80,58 @@ function reinicarJuego() {
  * 
  */
 async function verSugerencias() {
-    let matrizOrigen = JSON.parse(sessionStorage.getItem("MatrizOrigen"));
+
+    // Solicitar las sugerencias al controlador.
+    let matris_con_sugerencias = solicitarSugerencias();
 
     // Recuperar el tamaño del tablero.
     let tamano = parseInt(sessionStorage.getItem("SizeTablero"), 10);
 
-    generarTablero(tamano, matrizOrigen);
+    // Guardar las matriz del jugador.
+    sessionStorage.setItem("TableroVolatil", JSON.stringify(matris_con_sugerencias));
+
+    // Renderizar el tablero.
+    generarTablero(tamano, matris_con_sugerencias);
+
+
+    // Esta parte se tendria que revisar las validaciones que volvieron en la consulta.
+
+
+
+}
+
+
+/**
+ * Nombre: solicitarSugerencias
+ * 
+ * Descripcion: Funcion fecht para solicitar las sugerencias en controlador de 'Juego', esta funcion hace un get a la ruta de la funcion de SolicitarSugerencias
+ * 
+ * Entradas: No posee.
+ * 
+ * Salidas: Los datos de las de la matriz con sugerencias y las validaciones respectivas.
+ * 
+ */
+async function solicitarSugerencias() {
+    try {
+        const response = await fetch('/Juego/SolicitarSugerencias', {
+            method: 'GET',
+
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+        //console.log("Matriz con sugerencias:", data);
+
+        // Devover los datos de la matriz recibidad.
+        return data.matrizConSugerencias;
+
+
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+    }
 }
 
 
@@ -387,6 +433,19 @@ async function enviarMovimiento(fila, columna, valor) {
 
         //// Renderizar la matriz.
         generarTablero(tamano, tableroJuego);
+
+
+        // Mostrar los datos de las casillas.
+        alert(`En el tablero actual hay ${cantErrores} campos erroneos y ${cantVacios} campos vacios.`);
+
+        if (estadoJuego === 1) {
+
+            // El juego ha finalizado.
+
+            alert(`Juego finalizado, has completado el Sudoku.`);
+        }
+
+
 
     } catch (error) {
         console.error('Error en la solicitud:', error);

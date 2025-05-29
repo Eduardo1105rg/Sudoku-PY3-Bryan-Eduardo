@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace SudokuPY3.Services
 {
@@ -246,9 +247,28 @@ namespace SudokuPY3.Services
         }
 
 
-        public List<List<int>> OptenerSugerencia(List<List<int>> tableroJuego)
+        public List<List<int>> OptenerSugerencia()
         {
-            return tableroJuego;
+
+            string listaOrigenString = "[" + string.Join(",", TableroOrigen) + "]";
+            //Console.WriteLine($"\nLista origen: {listaOrigenString} \n");
+            string listaConCerosString = "[" + string.Join(",", TableroIncial) + "]";
+
+            //Console.WriteLine($"\nLista conceros: {listaConCerosString} \n");
+
+
+            // Realizar la consulta para optener las sugerencia.
+            string consultaSugerencia = $"hacer_sugerencia({listaConCerosString}, {listaOrigenString}, LActualizado, MatrizActualizada), write(MatrizActualizada), nl, halt.";
+            string respuestaSugerencias = EnviarConsulta(consultaSugerencia);
+
+            Console.WriteLine($"\nRespuesta de la matriz con sugerencias: {respuestaSugerencias} \n");
+
+            List<List<int>> matriz_sugerencia = MatrizStringToInt(respuestaSugerencias);
+
+            // Pasar la matriz string a una matriz  de enteros.
+
+
+            return matriz_sugerencia;
         } 
 
         public string VerificarCargaArchivo()
@@ -260,6 +280,24 @@ namespace SudokuPY3.Services
         {
             Console.WriteLine("Errores optenidos: ", prolog.StandardError.ReadToEnd());
             return prolog.StandardError.ReadToEnd();
+        }
+
+
+
+
+        public List<List<int>> MatrizStringToInt(string matriz_string)
+        {
+            matriz_string = matriz_string.Trim('[', ']');
+            List<List<int>> matriz_resultado = matriz_string
+                .Split("],[")
+                .Select(sublista => sublista
+                    .Split(',')
+                    .Select(num => int.Parse(num.Trim()))
+                    .ToList()
+                )
+                .ToList();
+
+            return matriz_resultado;
         }
 
     }
