@@ -190,13 +190,14 @@ pistas_en_matriz(ListaSudoku, MatrizSudokuConCeros) :-
 
 
 
-verifica_posicion(Fila, Col, Valor, ListaConCeros) :-
+verifica_posicion(Fila, Col, Valor, ListaConCeros, Variable) :-
     between(1, 9, Fila),
     between(1, 9, Col),
     between(1, 9, Valor),
     Indice is (Fila - 1) * 9 + (Col - 1),
     nth0(Indice, ListaConCeros, PosicionValo),
-    (PosicionValo =\= 0 -> fail ; true).
+    (PosicionValo =:= 0 -> Variable = true ; Variable = false).
+
 
 
 
@@ -209,7 +210,6 @@ cantidad_errores([CZ|TL], [CZ2|TL2], C) :-
         cantidad_errores(TL, TL2, C)
     ).
 
-
 cantidad_vacios([], 0).
 cantidad_vacios([CZ|TL], C) :-
     ( CZ =:= 0 ->
@@ -218,3 +218,16 @@ cantidad_vacios([CZ|TL], C) :-
     ;
         cantidad_vacios(TL, C)
     ).
+
+final_sudoku(CantidadErrores, CantidadVacios, Valor) :-
+    (CantidadErrores =:= 0, CantidadVacios =:= 0 ->
+        Valor = 1
+    ;
+        Valor = 0
+    ).
+
+% Llamar-> juego_final([1,2,3,4], [1,2,3,4], X)
+juego_final(ListaOriginal, ListaConCeros, [C, C1, Valor]) :-
+    cantidad_errores(ListaOriginal, ListaConCeros, C),
+    cantidad_vacios(ListaConCeros, C1),
+    final_sudoku(C, C1, Valor).

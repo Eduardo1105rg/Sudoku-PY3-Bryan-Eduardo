@@ -13,6 +13,9 @@
 async function iniciarJuego(tamano) {
     document.getElementById("modal").style.display = "none"; // Ocultar modal
     await solicitar_matriz(tamano); // Generar el tablero dinámicamente
+
+    // Iniciar el temporizador.
+    iniciarTemporizador();
 };
 
 /**
@@ -30,6 +33,10 @@ function inicarNuevoJuego() {
     // Limpiar el tablero.
     let tabla = document.getElementById("tablero");
     tabla.innerHTML = ""; 
+
+    // En esta parte iniciaria el proceso de guardar los datos de la partida.
+
+    detenerTemporizador();
 
     // desplegar el modal.
     document.getElementById("modal").style.display = "block";
@@ -314,12 +321,12 @@ function realizarMovimiento() {
         return;
     }
 
-    let celda = document.getElementById(`celda-${fila}-${columna}`);
-    celda.innerText = valor;
+    //let celda = document.getElementById(`celda-${fila}-${columna}`);
+    //celda.innerText = valor;
 
     enviarMovimiento(fila, columna, valor);
 
-    console.log(`Movimiento realizado en (${fila}, ${columna}): ${valor}`);
+    //console.log(`Movimiento realizado en (${fila}, ${columna}): ${valor}`);
 }
 
 /**
@@ -341,7 +348,7 @@ async function enviarMovimiento(fila, columna, valor) {
         console.log("Tablero a enviar: ", tableroVolatil, "\n");
 
         const dataToSend = JSON.stringify({ Fila: fila, Columna: columna, Valor: valor, Tablero: tableroVolatil, MatrizOrigen: matrizOrigen });
-        console.log("Datos a enviar de la jugada:", dataToSend);
+        //console.log("Datos a enviar de la jugada:", dataToSend);
 
         const response = await fetch('/Juego/jugadaSudoku', {
             method: 'POST',
@@ -358,17 +365,28 @@ async function enviarMovimiento(fila, columna, valor) {
         const data = await response.json();
         console.log("Datos recibido de la jugada:", data);
 
+
+        // Optener los datos de la respuestas.
+        let tableroJuego = data.tablero;
+
+        let cantErrores = data.cantErrores;
+
+        let cantVacios = data.cantVacios;
+
+        let estadoJuego = data.finalizado;
+
+
         //// Guardamos los datos del tamaño y la matriz para usarlos mas tarde.
 
-        //sessionStorage.setItem("TableroVolatil", JSON.stringify(data));
+        //sessionStorage.setItem("TableroVolatil", JSON.stringify(tableroJuego));
 
 
 
         //// Recuperar el tamaño del tablero.
-        //let tamano = parseInt(sessionStorage.getItem("SizeTablero"), 10);
+        let tamano = parseInt(sessionStorage.getItem("SizeTablero"), 10);
 
         //// Renderizar la matriz.
-        //generarTablero(tamano, data);
+        generarTablero(tamano, tableroJuego);
 
     } catch (error) {
         console.error('Error en la solicitud:', error);
@@ -401,6 +419,64 @@ function limpiarCasilla() {
     celda.innerText = "";
 
     console.log(`Casilla limpiada en (${fila}, ${columna})`);
+}
+
+
+
+let tiempoInicio;
+let intervalo;
+
+/**
+ * Nombre:
+ * 
+ * Descripcion:
+ * 
+ * Entradas:
+ * 
+ * Salidas:
+ * 
+ */
+function iniciarTemporizador() {
+    console.log("Temporizador iniciado");
+    tiempoInicio = Date.now(); // Guardamos el tiempo de inicio
+    intervalo = setInterval(actualizarTiempo, 1000);
+}
+
+/**
+ * Nombre:
+ * 
+ * Descripcion:
+ * 
+ * Entradas:
+ * 
+ * Salidas:
+ * 
+ */
+function actualizarTiempo() {
+    if (!tiempoInicio) {
+        console.error("El temporizador no ha iniciado correctamente.");
+        return;
+    }
+
+    let tiempoActual = Math.floor((Date.now() - tiempoInicio) / 1000); // 🔹 Calculamos la diferencia en segundos
+    document.getElementById("temporizador").innerText = `Tiempo: ${tiempoActual} s`;
+}
+
+/**
+ * Nombre:
+ * 
+ * Descripcion:
+ * 
+ * Entradas:
+ * 
+ * Salidas:
+ * 
+ */
+function detenerTemporizador() {
+    clearInterval(intervalo); // Detener el temporizador
+    let tiempoTotal = Math.floor((Date.now() - tiempoInicio) / 1000); // Obtener duración total
+    sessionStorage.setItem("TiempoDuracion", tiempoTotal);
+    console.log("Tiempo total de juego:", tiempoTotal, "segundos");
 }
 
 

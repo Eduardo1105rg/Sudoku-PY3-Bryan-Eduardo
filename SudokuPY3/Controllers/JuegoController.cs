@@ -21,41 +21,18 @@ namespace SudokuPY3.Controllers
         public IActionResult Juego()
         {
 
-            //List<List<int>> matrizSudoku = _prologService.ObtenerMatrizSudoku();
-            //string matrizSudoku2 = _prologService.EnviarConsulta("sudoku_con_pistas(MatrizConCeros, MatrizResuelta), write(MatrizConCeros), nl, halt.");
-            //string resultado = _prologService.EnviarConsulta("sudoku(Rows, M), writeln(M), nl, halt.");
-            //string resultado = _prologService.ObtenerErroresProlog();
-
-            //_logger.LogInformation(matrizSudoku2);
-
-            //_logger.LogInformation($"Cantidad de filas en la matriz: {matrizSudoku.Count}");
-
-            //foreach (var fila in matrizSudoku)
-            //{
-            //    _logger.LogInformation(string.Join(", ", fila));
-            //}
-            //_prologService.ObtenerMatrizSudokuV2(9);
             return View();
         }
 
         [HttpPost]
         public IActionResult solicitarMatriz([FromBody] InciarJuegoRequest tamano_request)
         {
-            //List<List<int>> matrizSudoku = _prologService.ObtenerMatrizSudoku(tamano_request.TamanoMatriz);
-
             List<List<List<int>>> matrizSudoku = _prologService.ObtenerMatrizSudokuV2(tamano_request.TamanoMatriz);
-
             List<List<int>> matrizResuelta = matrizSudoku[0]; 
             List<List<int>> matrizJuego = matrizSudoku[1];
 
-            //var matrizSudoku = _prologService.ObtenerMatrizSudoku(tamano_request.TamanoMatriz);
-            //_logger.LogInformation(matrizSudoku);
-            //_logger.LogInformation($"Cantidad de filas en la matriz: {matrizSudoku.Count}");
-            //foreach (var fila in matrizSudoku)
-            //{
-            //    _logger.LogInformation(string.Join(", ", fila));
-            //}
-            return Json(new { MatrizResuelta = matrizResuelta, MatrizJuego = matrizJuego }); ; //Json(new { matriz = matrizSudoku });
+
+            return Json(new { MatrizResuelta = matrizResuelta, MatrizJuego = matrizJuego }); //Json(new { matriz = matrizSudoku });
         }
 
 
@@ -79,8 +56,9 @@ namespace SudokuPY3.Controllers
             //{
             //    _logger.LogInformation(string.Join(", ", fila2));
             //}
+            var datosEnvio = _prologService.verificarMovimiento(fila, columna, valor, matrizRecibida);
 
-            return Json(new { matriz = "matrizSudoku" });
+            return datosEnvio;//Json(new { matriz = "matrizSudoku" });
 
         }
 

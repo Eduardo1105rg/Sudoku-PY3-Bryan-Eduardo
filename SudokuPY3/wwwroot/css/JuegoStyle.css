@@ -46,7 +46,11 @@
     margin: 2%;
 }
 
-
+.div-principal-selects {
+    display: flex;
+    margin: 2%;
+    align-content: space-between;
+}
 /*Para lo que seria el tablero*/
 #tablero-container {
     margin-top: 20px;
