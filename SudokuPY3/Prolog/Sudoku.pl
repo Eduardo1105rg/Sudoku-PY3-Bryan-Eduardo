@@ -80,7 +80,7 @@ asignaValores([Var|ListaSudoku]) :-
 % Funcionamiento: Por medio del random_between le decimos que queremos un número entre 17 a 25 y que este se guarde en NumPistas
 
 asignar_pistas(NumPistas) :-
-    random_between(17, 25, NumPistas).
+    random_between(56, 64, NumPistas).
 
 % Entradas: La lista de sudoku con ceros(o sea pistas) y la posicion 
 % Salidas: un true hasta que encuentre la posicion correcta
