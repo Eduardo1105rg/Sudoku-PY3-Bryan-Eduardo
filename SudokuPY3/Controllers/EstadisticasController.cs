@@ -10,6 +10,7 @@ namespace SudokuPY3.Controllers
 
         private readonly ILogger<EstadisticasController> _logger;
         private readonly PrologServices _prologService;
+        private readonly RegistroServices _registroService;
 
         /**
          * Nombre:
@@ -21,10 +22,11 @@ namespace SudokuPY3.Controllers
          * Salidas:
          * 
          */
-        public EstadisticasController(ILogger<EstadisticasController> logger, PrologServices prologService)
+        public EstadisticasController(ILogger<EstadisticasController> logger, PrologServices prologService, RegistroServices registroService)
         {
             _logger = logger;
             _prologService = prologService;
+            _registroService = registroService;
         }
 
 
@@ -40,7 +42,9 @@ namespace SudokuPY3.Controllers
          */
         public IActionResult Estadisticas()
         {
-            return View();
+
+            List<JuegoModel> historialPartidas = _registroService.OptenerHistorial();
+            return View(historialPartidas);
         }
 
 

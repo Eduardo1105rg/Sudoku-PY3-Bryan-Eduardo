@@ -11,11 +11,13 @@ namespace SudokuPY3.Controllers
 
         private readonly ILogger<JuegoController> _logger;
         private readonly PrologServices _prologService;
+        private readonly RegistroServices _registroService;
 
-        public JuegoController(ILogger<JuegoController> logger, PrologServices prologService)
+        public JuegoController(ILogger<JuegoController> logger, PrologServices prologService, RegistroServices registroService)
         {
             _logger = logger;
             _prologService = prologService;
+            _registroService = registroService;
         }
 
         public IActionResult Juego()
@@ -64,14 +66,60 @@ namespace SudokuPY3.Controllers
 
         }
 
-        [HttpGet]
-        public JsonResult SolicitarSugerencias()
+        [HttpPost]
+        public JsonResult SolicitarSugerencias([FromBody] DatosSugerenciasReques data_resquest)
         {
+
+            List<List<int>> tableroJugador = data_resquest.Tablero; // Recibir el tablero, esto seria para actualizarlo y modificarlo.
+
+
 
             List<List<int>> matriz_con_sugerencias = _prologService.OptenerSugerencia();
 
-            return Json(new { MatrizConSugerencias = matriz_con_sugerencias });
+            // >> En esta parte de aqui se haria algo para que se valide el movimiento.
+
+            List<int> listaNumeros = _prologService.Optener_Cant_Erores_Y_Vacios(matriz_con_sugerencias);
+
+            return Json(new { MatrizConSugerencias = matriz_con_sugerencias, CantErrores = listaNumeros[0], CantVacios = listaNumeros[1], Finalizado = listaNumeros[2] });
         }
+
+
+        [HttpPost]
+        public JsonResult FinalizacionPartida([FromBody] DatosFinalizacionRequest data_resquest)
+        {
+
+            // Optener los datos de la consulta:
+
+            int duracion = data_resquest.Duracion;
+
+            List<List<int>> ultimaMatriz = data_resquest.Tablero;
+
+            string tipoFinalizacion = data_resquest.TipoFinalizacion;
+
+            int canSugerencias = data_resquest.SugerenciasUtilizadas;
+
+
+            // Registrar los datos.
+            _registroService.FinalizarPartida(tipoFinalizacion, canSugerencias, duracion, ultimaMatriz);
+
+
+            return Json(new { Estado = "Finalizacion partida" });
+
+        }
+
+
+        [HttpGet]
+        public JsonResult ReiniciarPartida()
+        {
+
+            _registroService.ReinicarDatosJuego(); // Reiniciar los datos del juego actual.
+            Console.WriteLine("Datos de la partida actual reiniciados.");
+            
+
+            return Json(new { Estado = "Reinicio realizado" });
+        }
+
+
 
 
 
@@ -99,6 +147,25 @@ namespace SudokuPY3.Controllers
 
         }
 
+
+        public class DatosFinalizacionRequest
+        {
+            public int Duracion { get; set; }
+
+            public string TipoFinalizacion { get; set; }
+
+            public int SugerenciasUtilizadas { get; set; }
+
+            public List<List<int>> Tablero { get; set; }
+        }
+
+
+        public class DatosSugerenciasReques
+        {
+
+            public List<List<int>> Tablero { get; set; }
+
+        }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

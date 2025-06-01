@@ -16,11 +16,34 @@ namespace SudokuPY3.Services
 
         private List<int> TableroIncial;
 
-        public PrologServices()
+        private readonly RegistroServices _registroService; // Esto seria para el servicio de registro de los datos de las partidas de los juegos.
+
+        /**
+         * Nombre:
+         * 
+         * Descripcion:
+         * 
+         * Entradas:
+         * 
+         * Salidas:
+         * 
+         */
+        public PrologServices(RegistroServices registroService)
         {
             IniciarProlog();
+            _registroService = registroService;
         }
 
+        /**
+         * Nombre:
+         * 
+         * Descripcion:
+         * 
+         * Entradas:
+         * 
+         * Salidas:
+         * 
+         */
         private void IniciarProlog()
         {
             if (prolog == null || prolog.HasExited)
@@ -44,6 +67,16 @@ namespace SudokuPY3.Services
             }
         }
 
+        /**
+         * Nombre:
+         * 
+         * Descripcion:
+         * 
+         * Entradas:
+         * 
+         * Salidas:
+         * 
+         */
         public string EnviarConsulta(string consulta)
         {
             IniciarProlog(); 
@@ -54,6 +87,16 @@ namespace SudokuPY3.Services
             return prolog.StandardOutput.ReadLine();
         }
 
+        /**
+         * Nombre:
+         * 
+         * Descripcion:
+         * 
+         * Entradas:
+         * 
+         * Salidas:
+         * 
+         */
         public void CerrarProlog()
         {
             if (prolog != null && !prolog.HasExited)
@@ -64,14 +107,16 @@ namespace SudokuPY3.Services
             }
         }
 
-        public string EnviarListaDeListas(List<List<int>> lista)
-        {
-            string listaFormateada = "[" + string.Join(",", lista.Select(sublista => "[" + string.Join(",", sublista) + "]")) + "]";
-            string consulta = $"procesarLista({listaFormateada}), write('Resultado: '), nl, halt.";
-
-            return EnviarConsulta(consulta);
-        }
-
+        /**
+         * Nombre:
+         * 
+         * Descripcion:
+         * 
+         * Entradas:
+         * 
+         * Salidas:
+         * 
+         */
         public List<List<int>> ObtenerMatrizSudoku(int tamano)
         {
             // Consulta a Prolog para generar la matriz
@@ -99,6 +144,16 @@ namespace SudokuPY3.Services
         }
 
 
+        /**
+         * Nombre:
+         * 
+         * Descripcion:
+         * 
+         * Entradas:
+         * 
+         * Salidas:
+         * 
+         */
         public List<List<List<int>>> ObtenerMatrizSudokuV2(int tamano)
         {
             // Consulta a Prolog para generar la matriz
@@ -150,6 +205,14 @@ namespace SudokuPY3.Services
 
             this.TableroIncial = listaSudokuJuego;
 
+            
+
+            // Ahora guardar los datos de las matrices iniciales en el servicio de registro
+
+            int cantidadCeros = listaSudokuJuego.Count(valor => valor == 0); // Esto es para contar los elementos que cumplan cierta condicion dentro de una lista.
+
+            _registroService.RegistrarDatosIniciales(cantidadCeros, matrizSudokuResuelta, matrizSudokuJuego);
+
             return [matrizSudokuResuelta, matrizSudokuJuego];
         }
 
@@ -175,6 +238,16 @@ namespace SudokuPY3.Services
 
         // Si se decide hacer toda las consultas a la vez, entonces devolver una lista que tenga: [CantErrores, CantVacios, Finalizado]
 
+        /**
+         * Nombre:
+         * 
+         * Descripcion:
+         * 
+         * Entradas:
+         * 
+         * Salidas:
+         * 
+         */
         public JsonResult verificarMovimiento(int fila, int columna, int valor, List<List<int>> tableroEnJuego)
         {
 
@@ -243,10 +316,70 @@ namespace SudokuPY3.Services
                                     .ToList();
 
 
+            // En esta parte de aqui se guardarian los datos de la verificacion.
+            _registroService.VerificacionesRealizadas(); // Registrar una nueva verificacion
+
+            _registroService.ErroresVerificacion(listaNumeros[0]); // Sumar la cantidad de errores que hubo en esta verificacion.
+
             return new JsonResult(new { Tablero = tableroEnJuego, CantErrores = listaNumeros[0], CantVacios = listaNumeros[1], Finalizado = listaNumeros[2] });
         }
 
 
+        /**
+         * Nombre: Optener_Cant_Erores_Y_Vacios
+         * 
+         * Descripcion: Esta funcion se encarga de validar la cantidad de errores y de casillas vacias que posea el tablero actual del jugador. Se envia una consulta a prolog para realizar la verificacion.
+         * 
+         * Entradas: List<List<int>> tableroEnJuego: El tablero de Sudoku del jugador.
+         * 
+         * Salidas: Una lista de numeros con 3 elementos, en la posicion [0] esta la cantidad de errores, en la [1] la cantidad de casillas vacias, y en la [2] el estado actual del juego.
+         * 
+         */
+        public List<int> Optener_Cant_Erores_Y_Vacios(List<List<int>> tableroEnJuego)
+        {
+            string listaOrigenString = "[" + string.Join(",", TableroOrigen) + "]"; // Pasar a string la lista con el sudoku resuelto.
+
+            // Pasar el tablero en juego a una lista
+            List<int> listaTableroEnJuego = tableroEnJuego.SelectMany(sublista => sublista).ToList();
+
+            string listaTableroJuegoString = "[" + string.Join(",", listaTableroEnJuego) + "]";
+            //Console.WriteLine($"\nLista usuario: {listaTableroJuegoString} \n");
+
+
+            string consultaResultados = $"juego_final({listaOrigenString}, {listaTableroJuegoString}, Resultado), write(Resultado), nl, halt.";
+            string perro = EnviarConsulta(consultaResultados);
+
+
+            //Console.WriteLine($"Lista resultado consulta: {perro}");
+
+
+            List<int> listaNumeros = perro.Trim('[', ']')
+                                    .Split(',')
+                                    .Select(int.Parse)
+                                    .ToList();
+
+            // En esta parte de aqui se guardarian los datos de la verificacion.
+            _registroService.VerificacionesRealizadas(); // Registrar una nueva verificacion
+
+            _registroService.ErroresVerificacion(listaNumeros[0]); // Sumar la cantidad de errores que hubo en esta verificacion.
+
+
+            Console.WriteLine("Se optuvieron los datos de verificacion.");
+
+            return listaNumeros;
+        }
+
+
+        /**
+         * Nombre:
+         * 
+         * Descripcion:
+         * 
+         * Entradas:
+         * 
+         * Salidas:
+         * 
+         */
         public List<List<int>> OptenerSugerencia()
         {
 
@@ -269,13 +402,33 @@ namespace SudokuPY3.Services
 
 
             return matriz_sugerencia;
-        } 
+        }
 
+        /**
+         * Nombre:
+         * 
+         * Descripcion:
+         * 
+         * Entradas:
+         * 
+         * Salidas:
+         * 
+         */
         public string VerificarCargaArchivo()
         {
             return EnviarConsulta("writeln('Intentando abrir archivo...'), consult('C:\\Users\\edurg\\OneDrive\\Escritorio\\Prueba-Windows-forms\\PruebaMVC\\Prolog\\Sudoku.pl'), writeln('Archivo cargado correctamente.'), halt.");
         }
 
+        /**
+         * Nombre:
+         * 
+         * Descripcion:
+         * 
+         * Entradas:
+         * 
+         * Salidas:
+         * 
+         */
         public string ObtenerErroresProlog()
         {
             Console.WriteLine("Errores optenidos: ", prolog.StandardError.ReadToEnd());
@@ -284,7 +437,16 @@ namespace SudokuPY3.Services
 
 
 
-
+        /**
+         * Nombre:
+         * 
+         * Descripcion:
+         * 
+         * Entradas:
+         * 
+         * Salidas:
+         * 
+         */
         public List<List<int>> MatrizStringToInt(string matriz_string)
         {
             matriz_string = matriz_string.Trim('[', ']');

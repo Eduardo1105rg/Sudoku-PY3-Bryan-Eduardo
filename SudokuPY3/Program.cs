@@ -4,6 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<PrologServices>();
 
+builder.Services.AddSingleton<RegistroServices>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
