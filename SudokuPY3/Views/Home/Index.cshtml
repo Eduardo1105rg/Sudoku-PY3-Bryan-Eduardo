@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="contenedorPrincipal">
+    <!--Div principal que contendra todas las demas secciones-->
+    <section>
+        <!--Seccion de la parte superior de la pagina-->
+        <div>
+            <h1>Juego de Sudoku</h1>
+        </div>
+    </section>
+
+    <div class="contenedorInferior">
+        <div class="contenedorIzquierdo">
+            <!--Informacion-->
+            <h2>Historial de resultados</h2>
+
+            <div>
+                <p>Presiona el boton de abajo para ir a revisar el historial de las partidas jugadas.</p>
+            </div>
+            <div class="contenedor-redireccion">
+                @* <router-link class="redireccion-btn" to="/estadisticas">Historial</router-link> *@
+            </div>
+            <!-- <form action="/verHistorial" method="post">
+                <button type="submit">Ver historial</button>
+            </form> -->
+
+
+
+        </div>
+
+        <div class="contenedorDerecho">
+            <!--Juego| Todo lo referente a la configuracion y la redireccion-->
+
+            <div>
+                <!--Informacion general del juego-->
+                <h2>Aspectos importantes</h2>
+                <ul>
+                    <li>
+                        En el juego de ahorcado se tendran dos jugadores compiendo por turnos, cada jugador devera de seleccionar una letra, con la que crean que se completara la palabra dada.
+                    </li>
+
+
+                </ul>
+
+            </div>
+
+            <div class="contenedor-redireccion">
+
+                @* <router-link class="redireccion-btn" to="/juego">Juego</router-link> *@
+                <a asp-controller="Juego" asp-action="Juego">Jugar</a>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>

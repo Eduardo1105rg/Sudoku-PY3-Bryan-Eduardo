@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Juego page";
+   
+}
+
+<link href="~/css/juegostyle.css" rel="stylesheet" />
+
+
+@* <div id="modal">
+    <h2>Seleccione el tamaño del tablero</h2>
+    <button onclick="iniciarJuego(9)">Tablero 9x9</button>
+    <button onclick="iniciarJuego(16)">Tablero 16x16</button>
+</div> *@
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+
+        <div class="recuado-interior-modal">
+
+            <label> Seleccione el tamaño del tablero:</label>
+
+            <div class="div-botones-tamano">
+
+                <button onclick="iniciarJuego(9)">Tablero 9x9</button>
+                <button onclick="iniciarJuego(16)">Tablero 16x16</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+<div class="div-principal">
+
+    <h1>Sudoku</h1>
+
+
+    @*Div para lo que seria el temporizador.*@
+    <div class="div-temporizador">
+        <h3 id="temporizador">Tiempo de la partida: 0 s</h3>
+    </div>
+
+
+    @*Este seria el div para contener los botones y las opciones.*@
+    <div>
+
+        <label>Menu de opciones</label>
+
+
+
+        <div class="div-opciones-btn">
+        <button onclick="inicarNuevoJuego()">Inicar nuevo juego</button>
+        <button onclick="reinicarJuego()">Reiniciar juego</button>
+        <button onclick="verSugerencias()">Sugerencia</button>
+        <button onclick="verSolucion()">Ver solucion</button>
+        </div>
+
+        <form action="/" method="post">
+            <label>Realizar jugada:</label>
+
+            <div class="div-principal-selects">
+                <div class="div-fila-select">
+                    <label>Fila:</label>
+                    <select name="FilaSudoku"></select>
+                </div>
+
+                <div class="div-columna-select">
+                    <label>Columna:</label>
+                    <select name="ColumnaSudoku"></select>
+                </div>
+
+                <div class="div-valor-select">
+                    <label>Valor:</label>
+                    <select name="ValorSudoku"></select>
+                </div>
+            </div>
+
+            <div class="div-jugada-btn">
+
+                <button type="button" onclick="realizarMovimiento()">Realizar movimiento</button>
+                <button type="button" onclick="limpiarCasilla()">Limpiar casilla</button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    @*Este seria el div del tablero*@
+    <div id="tablero-container">
+        <table id="tablero"></table>
+    </div>
+
+
+</div>
+
+
+
+<script src="~/js/JuegoScript.js"></script>
