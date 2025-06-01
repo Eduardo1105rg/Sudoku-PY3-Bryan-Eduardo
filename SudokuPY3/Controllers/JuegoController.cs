@@ -74,7 +74,7 @@ namespace SudokuPY3.Controllers
 
 
 
-            List<List<int>> matriz_con_sugerencias = _prologService.OptenerSugerencia();
+            List<List<int>> matriz_con_sugerencias = _prologService.OptenerSugerencia(tableroJugador);
 
             // >> En esta parte de aqui se haria algo para que se valide el movimiento.
 

@@ -137,7 +137,7 @@ async function enviarSolicitudDeReinicio() {
 async function verSugerencias() {
     // Revisar la cantidad de sugerencias restantes:
     let cantSugerencias = parseInt(sessionStorage.getItem("CantSugerencias"), 10);
-    console.log("Can sugerencias: ", cantSugerencias);
+    //console.log("Can sugerencias: ", cantSugerencias);
     if (cantSugerencias != 5) {
 
         // Modificar el contador de susgerencias:
@@ -217,30 +217,6 @@ async function verSugerencias() {
  * Salidas: Los datos de las de la matriz con sugerencias y las validaciones respectivas.
  * 
  */
-//async function solicitarSugerencias() {
-//    try {
-//        const response = await fetch('/Juego/SolicitarSugerencias', {
-//            method: 'GET',
-
-//        });
-
-//        if (!response.ok) {
-//            throw new Error(`Error HTTP: ${response.status}`);
-//        }
-
-//        const data = await response.json();
-//        console.log("Matriz con sugerencias:", data);
-
-//        // Devover los datos de la matriz recibidad.
-//        return data;
-
-
-//    } catch (error) {
-//        console.error("Error en la solicitud:", error);
-//    }
-
-//}
-
 async function solicitarSugerencias() {
 
     try {
@@ -630,7 +606,9 @@ function limpiarCasilla() {
     let tableroVolatil = JSON.parse(sessionStorage.getItem("TableroVolatil"));
     let tableroConCeros = JSON.parse(sessionStorage.getItem("TableroOriginal"));
 
-    let valor = tableroConCeros[fila][columna];
+    let valor = tableroConCeros[fila - 1][columna - 1];
+
+    console.log("Realizando eliminacion.");
 
     if (valor === 0) {
         tableroVolatil[fila][columna] = 0; // Modificarla con un cero en esa posicion
@@ -640,6 +618,8 @@ function limpiarCasilla() {
         // Limpiar esa casilla del tablero.
         let celda = document.getElementById(`celda-${fila}-${columna}`);
         celda.innerText = "";
+
+        alert("Casilla limpiada.");
 
     } else { // Si en la original no havia un cero entonces no se puede modificar.
         alert("No se puede borrar esta casilla debido a que esta es una de las casillas por defecto.");
