@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,22 +8,24 @@ namespace SudokuPY3.Services
     public class PrologServices
     {
 
-        private Process prolog;
+        private Process prolog; // Instancia de prolog para todo el juego.
 
-        private List<int> TableroOrigen;
+        private List<int> TableroOrigen; // Lista original creada para el juego actual.
 
-        private List<int> TableroIncial;
+        private List<int> TableroIncial; // Lista con ceros creada para el juego actual.
+
+        //private List<List<int>> MatrizDeCerosOriginal;
 
         private readonly RegistroServices _registroService; // Esto seria para el servicio de registro de los datos de las partidas de los juegos.
 
         /**
-         * Nombre:
+         * Nombre: PrologServices
          * 
-         * Descripcion:
+         * Descripcion: Contructor de la clase.
          * 
-         * Entradas:
+         * Entradas: RegistroServices registroService: La clase de registro.
          * 
-         * Salidas:
+         * Salidas: No posee.
          * 
          */
         public PrologServices(RegistroServices registroService)
@@ -35,13 +35,15 @@ namespace SudokuPY3.Services
         }
 
         /**
-         * Nombre:
+         * Nombre: IniciarProlog
          * 
-         * Descripcion:
+         * Descripcion: Funcion para incializar el proceso de porlog, establece la conexion inical a prolog para que se pueda hacer consultas a este.
          * 
-         * Entradas:
+         * Entradas: No posee.
          * 
-         * Salidas:
+         * Salidas: No posee.
+         * 
+         * Nota: Cambiar la ruta de 'Arguments' antes de usar el programa en otra computadora, debe se usar este formato: "-s \"{En esta parte va la ruta}\""
          * 
          */
         private void IniciarProlog()
@@ -68,13 +70,13 @@ namespace SudokuPY3.Services
         }
 
         /**
-         * Nombre:
+         * Nombre: EnviarConsulta
          * 
-         * Descripcion:
+         * Descripcion: Funcion para enviar las consultas a Prolog y recibir las respuestas que este gera
          * 
-         * Entradas:
+         * Entradas: string consulta: Los datos de la consulta a realizar.
          * 
-         * Salidas:
+         * Salidas: Un string con las respuesta a la consulta realizada.
          * 
          */
         public string EnviarConsulta(string consulta)
@@ -88,13 +90,13 @@ namespace SudokuPY3.Services
         }
 
         /**
-         * Nombre:
+         * Nombre: CerrarProlog
          * 
-         * Descripcion:
+         * Descripcion: Funcion para detener el proceso de prolog.
          * 
-         * Entradas:
+         * Entradas: No posee.
          * 
-         * Salidas:
+         * Salidas: No posee.
          * 
          */
         public void CerrarProlog()
@@ -205,6 +207,8 @@ namespace SudokuPY3.Services
 
             this.TableroIncial = listaSudokuJuego;
 
+            //this.MatrizDeCerosOriginal = matrizSudokuJuego;
+
             
 
             // Ahora guardar los datos de las matrices iniciales en el servicio de registro
@@ -239,7 +243,7 @@ namespace SudokuPY3.Services
         // Si se decide hacer toda las consultas a la vez, entonces devolver una lista que tenga: [CantErrores, CantVacios, Finalizado]
 
         /**
-         * Nombre:
+         * Nombre: verificarMovimiento
          * 
          * Descripcion:
          * 
@@ -253,10 +257,10 @@ namespace SudokuPY3.Services
 
             string listaConCerosString = "[" + string.Join(",", TableroIncial) + "]";
 
-            Console.WriteLine($"\nLista conceros: {listaConCerosString} \n");
+            //Console.WriteLine($"\nLista conceros: {listaConCerosString} \n");
 
             string listaOrigenString = "[" + string.Join(",", TableroOrigen) + "]";
-            Console.WriteLine($"\nLista origen: {listaOrigenString} \n");
+            //Console.WriteLine($"\nLista origen: {listaOrigenString} \n");
 
 
 
@@ -265,12 +269,11 @@ namespace SudokuPY3.Services
             // Lo primero es verificar si se puede agregar ese dato en la posicion indicada.
             string consultaVerificacion = $"verifica_posicion({fila}, {columna}, {valor}, {listaConCerosString}, Variable), write(Variable), nl, halt.";
             string respuestaVerificacion = EnviarConsulta(consultaVerificacion);
-            Console.WriteLine($"Verificación del movimiento: {respuestaVerificacion}");
-            //verifica_posicion(1, 6, 4, [5,4,3,7,0,0,6,1,8,9,0,1,6,0,0,2,0,5,0,6,0,3,1,5,4,9,7,0,2,0,0,5,3,7,8,0,3,5,7,9,6,8,1,0,0,1,0,9,0,2,0,3,5,6,8,1,5,2,7,0,0,4,3,7,3,2,5,4,9,0,6,1,4,0,0,8,3,1,5,0,0]), write(Valido), nl, halt.
-            
+            //Console.WriteLine($"Verificación del movimiento: {respuestaVerificacion}");
+ 
+            // Verificar si es podible modificar esa posicion.
             if (respuestaVerificacion.Contains("true"))
             {
-                // Aqui se deberia de insertar un valor en la posicion indicada por el usuario.
                 tableroEnJuego[fila - 1][columna - 1] = valor;
             }
 
@@ -279,37 +282,15 @@ namespace SudokuPY3.Services
             string listaTableroJuegoString = "[" + string.Join(",", listaTableroEnJuego) + "]";
             Console.WriteLine($"\nLista usuario: {listaTableroJuegoString} \n");
 
-            // >> En caso de hacer todas en unos solo todas estas partes deberan quitarse.
 
-
-
-            // Aqui seria para optener la cantidad de fallos que hay.
-            //string consultaErrores = $"cantidad_errores({TableroOrigen}, {listaTableroJuegoString}, CantErrores), write(CantErrores), nl, halt.";
-            //string respuestaErrores = EnviarConsulta(consultaErrores);
-            //int cantidadErrores = int.Parse(respuestaErrores.Trim());
-            //Console.WriteLine("CantErrores: ", cantidadErrores);
-
-            //// Aqui seria para optener la cantidad de elementos vacios (Casillas con ceros).
-            //string consultaVacios = $"cantidad_vacios({listaTableroJuegoString}, CantVacios), write(CantVacios), nl, halt.";
-            //string respuestaVacios = EnviarConsulta(consultaVacios);
-            //int cantidadVacios = int.Parse(respuestaVacios.Trim());
-            //Console.WriteLine("CantVacios: ", cantidadVacios);
-
-            //ObtenerErroresProlog();
+            // Consultar para ver cuantos errores y elementos vacios hay, ademas, se revisa si ya termino el juego.
             string consultaResultados = $"juego_final({listaOrigenString}, {listaTableroJuegoString}, Resultado), write(Resultado), nl, halt.";
             string perro = EnviarConsulta(consultaResultados);
-            //ObtenerErroresProlog();
-            //string na = "";
-            //perro = perro.Trim();
+
 
             Console.WriteLine($"Lista resultado consulta: {perro}");
-            //		"juego_final([9,5,3,1,6,2,4,8,7,6,1,7,4,5,8,3,2,9,4,8,2,7,3,9,1,5,6,1,9,6,8,2,5,7,3,4,5,7,8,9,4,3,6,1,2,3,2,4,6,1,7,5,9,8,8,3,5,2,7,6,9,4,1,7,4,9,5,8,1,2,6,3,2,6,1,3,9,4,8,7,5], [9,5,3,0,6,2,4,0,7,1,0,7,4,5,8,0,2,0,4,8,2,7,3,9,1,0,0,1,0,6,0,2,5,0,3,4,0,7,0,9,4,3,6,1,2,3,2,0,6,1,7,0,9,8,0,3,5,2,0,6,0,4,1,7,4,9,5,8,0,0,6,3,2,6,0,3,9,4,8,0,0], Resultado), write(Resultado), nl, halt."
 
-
-            //juego_final([3,1,8,2,6,5,4,9,7,7,5,2,1,4,9,3,6,8,6,9,4,7,3,8,1,2,5,5,4,7,6,1,2,9,8,3,1,8,9,5,7,3,2,4,6,2,3,6,9,8,4,7,5,1,9,2,1,3,5,6,8,7,4,4,7,5,8,9,1,6,3,2,8,6,3,4,2,7,5,1,9], [3,1,0,0,6,0,0,9,7,7,5,2,1,0,9,3,6,8,0,0,4,7,0,0,1,2,5,5,0,7,6,0,2,9,8,3,1,8,9,5,7,3,2,0,0,0,0,0,9,8,4,0,5,0,9,2,0,0,5,6,0,7,4,4,7,5,0,9,1,6,3,0,8,6,0,4,2,7,0,1,9], X), write(X), nl, halt.
-
-            // Aqui seria la consulta para ver si ya se termino el juego.
-
+            // Parar la lista de string a numeros.
             List<int> listaNumeros = perro.Trim('[', ']')
                                     .Split(',')
                                     .Select(int.Parse)
@@ -371,16 +352,17 @@ namespace SudokuPY3.Services
 
 
         /**
-         * Nombre:
+         * Nombre: OptenerSugerencia
          * 
-         * Descripcion:
+         * Descripcion: Funcion para optener una sugerencia de movimiento desde prolog, este devolvera una lista  la que posteriormente se modificara para poderla devolver 
+         * al usuario y generar la sugerencia.
          * 
-         * Entradas:
+         * Entradas:  List<List<int>> tableroJugador: El tablero del jugador, el tablero actual.
          * 
-         * Salidas:
+         * Salidas: Una matriz de enteros con la sugerencia optenida desde prolog.
          * 
          */
-        public List<List<int>> OptenerSugerencia()
+        public List<List<int>> OptenerSugerencia(List<List<int>> tableroJugador)
         {
 
             string listaOrigenString = "[" + string.Join(",", TableroOrigen) + "]";
@@ -396,22 +378,28 @@ namespace SudokuPY3.Services
 
             Console.WriteLine($"\nRespuesta de la matriz con sugerencias: {respuestaSugerencias} \n");
 
+            // Pasar la matriz string a una matriz  de enteros.
             List<List<int>> matriz_sugerencia = MatrizStringToInt(respuestaSugerencias);
 
-            // Pasar la matriz string a una matriz  de enteros.
+
+            // Combinar las dos matrices, para que se puedan mantener los datos actuales del jugador.
+
+            //List<List<int>> matrizDeCerosOriginal = _registroService.OptenerMatrizConCeros();
+
+            List<List<int>> matriz_con_sugerencias = ReemplazarMatriz(tableroJugador, matriz_sugerencia);
 
 
-            return matriz_sugerencia;
+            return matriz_con_sugerencias;
         }
 
         /**
-         * Nombre:
+         * Nombre: VerificarCargaArchivo
          * 
-         * Descripcion:
+         * Descripcion: Funcion para verificar la carga del archivo que contiene las instrucciones de prolog.
          * 
-         * Entradas:
+         * Entradas: No posee.
          * 
-         * Salidas:
+         * Salidas: El stirng con los datos del error de la carga del archivo.
          * 
          */
         public string VerificarCargaArchivo()
@@ -420,13 +408,13 @@ namespace SudokuPY3.Services
         }
 
         /**
-         * Nombre:
+         * Nombre: ObtenerErroresProlog
          * 
-         * Descripcion:
+         * Descripcion: Funcion para optener los errores que se generan al realizar una consult a prolog.
          * 
-         * Entradas:
+         * Entradas: No posee.
          * 
-         * Salidas:
+         * Salidas: Los datos de un error (En caso de haberlos).
          * 
          */
         public string ObtenerErroresProlog()
@@ -438,13 +426,13 @@ namespace SudokuPY3.Services
 
 
         /**
-         * Nombre:
+         * Nombre: MatrizStringToInt
          * 
-         * Descripcion:
+         * Descripcion: Funcion para pasar una matriz que esta en string, a una matriz de enteros.
          * 
-         * Entradas:
+         * Entradas: string matriz_string: Una matriz en formato string.
          * 
-         * Salidas:
+         * Salidas: Una matriz de enteros formada a partir de la matriz string.
          * 
          */
         public List<List<int>> MatrizStringToInt(string matriz_string)
@@ -461,6 +449,46 @@ namespace SudokuPY3.Services
 
             return matriz_resultado;
         }
+
+        /**
+         * Nombre: ReemplazarMatriz
+         * 
+         * Descripcion: Funcion para reemplazar los elemenos de una matriz con los elementos de otra matriz, posicion por posicion, exeptuando los elementos en donde el valor de la segunda 
+         * matriz sea cero. 
+         * 
+         * Entradas: List<List<int>> matrizJugador: La matriz a la cual se le reemplazaran los elementos, List<List<int>> matrizConCeros: La matriz que sera copiada en la primer matriz.
+         * 
+         * Salidas: Una matriz.
+         * 
+         */
+        public List<List<int>> ReemplazarMatriz(List<List<int>> matrizJugador, List<List<int>> matrizConCeros)
+        {
+
+            // Creamos la matriz resultante copiando la original
+            List<List<int>> matrizResultado = matrizJugador.Select(fila => new List<int>(fila)).ToList();
+
+            // Recorremos ambas listas para ir copiando los elementos.
+            for (int i = 0; i < matrizJugador.Count; i++)
+            {
+                for (int j = 0; j < matrizJugador[i].Count; j++)
+                {
+                    // Los elementos que son ceros se dejan como estaba.
+                    //Console.WriteLine($"Data de las matrices en unificacion: Ceros->{matrizConCeros[i][j].ToString()} -- Jugador->{matrizResultado[i][j].ToString()}");
+                    if (matrizConCeros[i][j] != 0)
+                    {
+                        matrizResultado[i][j] = matrizConCeros[i][j];
+                    }
+                }
+            }
+
+            //Console.WriteLine("Matrices unificadas.");
+
+            // devolver la matriz copiada.
+            return matrizResultado;
+        }
+
+
+
 
     }
 }

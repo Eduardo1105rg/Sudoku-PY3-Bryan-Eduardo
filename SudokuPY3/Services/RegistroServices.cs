@@ -147,15 +147,19 @@ namespace SudokuPY3.Services
 
 
         /**
-         * Nombre:
+         * Nombre: OptenerMatrizConCeros
          * 
-         * Descripcion:
+         * Descripcion: Funcion para optener la matriz con ceros del juego actual.
          * 
-         * Entradas:
+         * Entradas: No posee.
          * 
-         * Salidas:
+         * Salidas: La matriz con ceros creada para el juego actual.
          * 
          */
+        public List<List<int>> OptenerMatrizConCeros() {
+
+            return juegoActual.MatrizConCeros;
+        }
 
         /**
          * Nombre:
