@@ -13,6 +13,16 @@ namespace SudokuPY3.Controllers
         private readonly PrologServices _prologService;
         private readonly RegistroServices _registroService;
 
+        /**
+         * Nombre: JuegoController
+         * 
+         * Descripcion: Constructor de la clase Juego.
+         * 
+         * Entradas: Recibe los servicios que usara la clase.
+         * 
+         * Salidas: No posee.
+         * 
+         */
         public JuegoController(ILogger<JuegoController> logger, PrologServices prologService, RegistroServices registroService)
         {
             _logger = logger;
@@ -20,12 +30,32 @@ namespace SudokuPY3.Controllers
             _registroService = registroService;
         }
 
+        /**
+         * Nombre:
+         * 
+         * Descripcion:
+         * 
+         * Entradas: No posee.
+         * 
+         * Salidas: Renderizara la ventana correspondiente al juego.
+         * 
+         */
         public IActionResult Juego()
         {
 
             return View();
         }
 
+        /**
+         * Nombre: solicitarMatriz
+         * 
+         * Descripcion: Funcion para  solicitar el tablero del juego al servicios de prolog y devolverlo hacia la interfaz. Esta funcion puede ser llamada desde la interfaz mediante un metodo POST.
+         * 
+         * Entradas: InciarJuegoRequest tamano_request: Un modelos de datos.
+         * 
+         * Salidas: Un objeto tipo json con los datos que devolvera la consulta.
+         * 
+         */
         [HttpPost]
         public IActionResult solicitarMatriz([FromBody] InciarJuegoRequest tamano_request)
         {
@@ -37,7 +67,16 @@ namespace SudokuPY3.Controllers
             return Json(new { MatrizResuelta = matrizResuelta, MatrizJuego = matrizJuego }); //Json(new { matriz = matrizSudoku });
         }
 
-
+        /**
+         * Nombre:
+         * 
+         * Descripcion: Esta funcion puede ser llamada desde la interfaz mediante un metodo POST.
+         * 
+         * Entradas:  Un modelos de datos.
+         * 
+         * Salidas: Un objeto tipo json con los datos que devolvera la consulta.
+         * 
+         */
         [HttpPost]
         public JsonResult jugadaSudoku([FromBody] DatosMovimientoRequest data_resquest)
         {
@@ -66,6 +105,16 @@ namespace SudokuPY3.Controllers
 
         }
 
+        /**
+         * Nombre:
+         * 
+         * Descripcion: Esta funcion puede ser llamada desde la interfaz mediante un metodo POST.
+         * 
+         * Entradas: DatosMovimientoRequest data_resquest: Un modelos de datos.
+         * 
+         * Salidas: Un objeto tipo json con los datos que devolvera la consulta.
+         * 
+         */
         [HttpPost]
         public JsonResult SolicitarSugerencias([FromBody] DatosSugerenciasReques data_resquest)
         {
@@ -84,6 +133,16 @@ namespace SudokuPY3.Controllers
         }
 
 
+        /**
+         * Nombre: FinalizacionPartida
+         * 
+         * Descripcion: Esta funcion puede ser llamada desde la interfaz mediante un metodo POST.
+         * 
+         * Entradas: DatosFinalizacionRequest data_resques: Un modelos de datos.
+         * 
+         * Salidas:  Un objeto tipo json con los datos que devolvera la consulta.
+         * 
+         */
         [HttpPost]
         public JsonResult FinalizacionPartida([FromBody] DatosFinalizacionRequest data_resquest)
         {
@@ -108,6 +167,16 @@ namespace SudokuPY3.Controllers
         }
 
 
+        /**
+         * Nombre: ReiniciarPartida
+         * 
+         * Descripcion: Funcion para solicitar el reinicio de los datos al servicios de registro. Esta funcion puede ser llamada desde un metodo GET en la vista.
+         * 
+         * Entradas: No posee.
+         * 
+         * Salidas: Un objeto tipo json con los datos que devolvera la consulta.
+         * 
+         */
         [HttpGet]
         public JsonResult ReiniciarPartida()
         {
@@ -125,6 +194,7 @@ namespace SudokuPY3.Controllers
 
         // Estos serian las modelos de datos:
 
+        /* Modelo de datos para pasar el tamaño de una matriz al controlador */
         public class InciarJuegoRequest
         {
 
@@ -132,7 +202,7 @@ namespace SudokuPY3.Controllers
 
         }
 
-
+        /* Modelo de datos para pasar los datos de un movimiento en el tablero al controlador.*/
         public class DatosMovimientoRequest
         {
             public int Fila { get; set; }
@@ -147,7 +217,7 @@ namespace SudokuPY3.Controllers
 
         }
 
-
+        /* Modelo de datos  para pasar los datos de finalizacion de una partida al controlador. */
         public class DatosFinalizacionRequest
         {
             public int Duracion { get; set; }
@@ -159,7 +229,7 @@ namespace SudokuPY3.Controllers
             public List<List<int>> Tablero { get; set; }
         }
 
-
+        /* Modelo de datos para pasar los datos de la atriz del usuario al controlador */
         public class DatosSugerenciasReques
         {
 

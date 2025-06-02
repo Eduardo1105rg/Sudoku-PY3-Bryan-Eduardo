@@ -13,13 +13,13 @@ namespace SudokuPY3.Controllers
         private readonly RegistroServices _registroService;
 
         /**
-         * Nombre:
+         * Nombre: EstadisticasController
          * 
-         * Descripcion:
+         * Descripcion: Contructor de la clase EstadisticasServices.
          * 
-         * Entradas:
+         * Entradas: Los servicios que usara la clase.
          * 
-         * Salidas:
+         * Salidas: No posee.
          * 
          */
         public EstadisticasController(ILogger<EstadisticasController> logger, PrologServices prologService, RegistroServices registroService)
@@ -31,13 +31,13 @@ namespace SudokuPY3.Controllers
 
 
         /**
-         * Nombre:
+         * Nombre: Estadisticas
          * 
-         * Descripcion:
+         * Descripcion: Funcion para renderizar la ventana de estadisticas.
          * 
-         * Entradas:
+         * Entradas: No posee.
          * 
-         * Salidas:
+         * Salidas: La ventana de estadisticas.
          * 
          */
         public IActionResult Estadisticas()

@@ -119,43 +119,6 @@ namespace SudokuPY3.Services
          * Salidas:
          * 
          */
-        public List<List<int>> ObtenerMatrizSudoku(int tamano)
-        {
-            // Consulta a Prolog para generar la matriz
-            string consulta = "sudoku_con_pistas(MatrizConCeros, MatrizResuelta), write(MatrizConCeros), nl, halt.";
-            string resultado = EnviarConsulta(consulta);
-
-            //Console.WriteLine("Respuesta de Prolog: " + resultado);
-
-            resultado = resultado.Trim('[', ']');
-
-           
-            List<List<int>> matrizSudoku = resultado
-                .Split("],[")
-                .Select(sublista => sublista
-                    .Split(',') 
-                    .Select(num => int.Parse(num.Trim())) 
-                    .ToList()
-                )
-                .ToList();
-
-            //Console.WriteLine($"Cantidad de filas en la matriz: {matrizSudoku.Count}");
-
-
-            return matrizSudoku;
-        }
-
-
-        /**
-         * Nombre:
-         * 
-         * Descripcion:
-         * 
-         * Entradas:
-         * 
-         * Salidas:
-         * 
-         */
         public List<List<List<int>>> ObtenerMatrizSudokuV2(int tamano)
         {
             // Consulta a Prolog para generar la matriz
@@ -245,7 +208,8 @@ namespace SudokuPY3.Services
         /**
          * Nombre: verificarMovimiento
          * 
-         * Descripcion:
+         * Descripcion: Funciona para realizar las consultas a porlog para verificar si se puede realizar un movimiento y optener las cantidad de casillas erronea y la cantidad de casillas vacias 
+         * que hay actualmente en el tablero.
          * 
          * Entradas:
          * 

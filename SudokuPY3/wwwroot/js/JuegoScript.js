@@ -1,13 +1,13 @@
 ﻿//document.addEventListener('DOMContentLoaded', () => {
 
 /**
- * Nombre:
+ * Nombre: iniciarJuego
  * 
- * Descripcion:
+ * Descripcion: Funcion que se llama a la hora que se define el tamaño de una matriz para iniciar el proceso de juego.
  * 
- * Entradas:
+ * Entradas: El tamaño de la matriz.
  * 
- * Salidas:
+ * Salidas: No pósee.
  * 
  */
 async function iniciarJuego(tamano) {
@@ -19,13 +19,13 @@ async function iniciarJuego(tamano) {
 };
 
 /**
- * Nombre:
+ * Nombre: inicarNuevoJuego
  * 
- * Descripcion:
+ * Descripcion: Funcion para solicitar el inicio de un nuevo juego.
  * 
- * Entradas:
+ * Entradas: No pósee.
  * 
- * Salidas:
+ * Salidas: No pósee.
  * 
  */
 function inicarNuevoJuego() {
@@ -50,13 +50,13 @@ function inicarNuevoJuego() {
 }
 
 /**
- * Nombre:
+ * Nombre: reinicarJuego
  * 
- * Descripcion:
+ * Descripcion: Funcion para solicitar el inicio de un nuevo juego.
  * 
- * Entradas:
+ * Entradas: No pósee.
  * 
- * Salidas:
+ * Salidas: No pósee.
  * 
  */
 function reinicarJuego() {
@@ -90,13 +90,13 @@ function reinicarJuego() {
 }
 
 /**
- * Nombre:
+ * Nombre: enviarSolicitudDeReinicio
  * 
- * Descripcion:
+ * Descripcion: Funcion para enviar la solicitud de reinicio de juego al controlador mediente un 'fetch'.
  * 
- * Entradas:
+ * Entradas: No pósee.
  * 
- * Salidas:
+ * Salidas: No pósee.
  * 
  */
 async function enviarSolicitudDeReinicio() {
@@ -125,13 +125,13 @@ async function enviarSolicitudDeReinicio() {
 }
 
 /**
- * Nombre:
+ * Nombre: verSugerencias
  * 
- * Descripcion:
+ * Descripcion: Funcion para solicitar sugerencias.
  * 
- * Entradas:
+ * Entradas: No pósee.
  * 
- * Salidas:
+ * Salidas: No pósee.
  * 
  */
 async function verSugerencias() {
@@ -250,13 +250,13 @@ async function solicitarSugerencias() {
 }
 
 /**
- * Nombre:
+ * Nombre: verSolucion
  * 
- * Descripcion:
+ * Descripcion: Funcion para desplegar el tablero original del sudoku con la solucion..
  * 
- * Entradas:
+ * Entradas: No posee.
  * 
- * Salidas:
+ * Salidas: No posee.
  * 
  */
 async function verSolucion() {
@@ -309,13 +309,13 @@ async function verSolucion() {
 
 
 /**
- * Nombre:
+ * Nombre: solicitar_matriz
  * 
- * Descripcion:
+ * Descripcion: Funcion para solicitar una matriz al controlador 'Juego' mediente un metodo 'POST'
  * 
- * Entradas:
+ * Entradas: El tamaño de la matriz a solicitar.
  * 
- * Salidas:
+ * Salidas: No posee.
  * 
  */
 async function solicitar_matriz(tamano) {
@@ -373,13 +373,13 @@ async function solicitar_matriz(tamano) {
 
 
 /**
- * Nombre:
+ * Nombre: generarTablero
  * 
- * Descripcion:
+ * Descripcion: Funcion para reenderizar el tablero de sudoku en la interfaz del juego.
  * 
- * Entradas:
+ * Entradas: size: Tamaño de la matriz, matriz: Tablero a renderizar.
  * 
- * Salidas:
+ * Salidas: No posee.
  * 
  */
 function generarTablero(size, matriz) {
@@ -394,7 +394,8 @@ function generarTablero(size, matriz) {
             let celda = fila.insertCell();
             let valor = matriz[i][j] === 0 ? "" : matriz[i][j]; // Si es 0, la celda queda vacia
 
-            celda.innerHTML = `<span id="celda-${i}-${j}" onclick="seleccionarCelda(${i},${j})">${valor}</span>`;
+            celda.innerHTML = `<span id="celda-${i}-${j}" >${valor}</span>`;
+            //onclick="seleccionarCelda(${i},${j})" // Esto seria para seleccionar las celdas tocandolas.
 
             // Aplicar bordes oscuros en las agrupaciones
             celda.style.border = "1px solid black";
@@ -411,13 +412,13 @@ function generarTablero(size, matriz) {
 }
 
 /**
- * Nombre:
+ * Nombre: seleccionarCelda
  * 
- * Descripcion:
+ * Descripcion: Funcion para iniar la modificacion de una casillas del tablero.
  * 
- * Entradas:
+ * Entradas: Posicion en la que se desea realizar la modificacion.
  * 
- * Salidas:
+ * Salidas: No posee.
  * 
  */
 function seleccionarCelda(fila, columna) {
@@ -427,13 +428,13 @@ function seleccionarCelda(fila, columna) {
 }
 
 /**
- * Nombre:
+ * Nombre: generarOpcionesSelect
  * 
- * Descripcion:
+ * Descripcion: Funcion para renderizar las opciones de los selec, dependiendo del tamño de la matriz.
  * 
- * Entradas:
+ * Entradas: Tamaño de la matriz.
  * 
- * Salidas:
+ * Salidas: No posee.
  * 
  */
 function generarOpcionesSelect(size) {
@@ -456,13 +457,13 @@ function generarOpcionesSelect(size) {
 }
 
 /**
- * Nombre:
+ * Nombre: realizarMovimiento
  * 
- * Descripcion:
+ * Descripcion: Funcion para realizar la colocacion de un nuevo numero en una posicion especifica del tablero.
  * 
- * Entradas:
+ * Entradas: No posee.
  * 
- * Salidas:
+ * Salidas: No posee.
  * 
  */
 function realizarMovimiento() {
@@ -484,13 +485,13 @@ function realizarMovimiento() {
 }
 
 /**
- * Nombre:
+ * Nombre: enviarMovimiento
  * 
- * Descripcion:
+ * Descripcion: Funcion para enviar los datos de una jugada al controlador de 'Juego' mediante un metodo POST.
  * 
- * Entradas:
+ * Entradas: int fila: Fila que se desea usar, int columna: columna que se desea modificar, int valor: Valor del 1 al 9 que se desea agregar al tablero.
  * 
- * Salidas:
+ * Salidas: No posee.
  * 
  */
 async function enviarMovimiento(fila, columna, valor) {
@@ -582,13 +583,13 @@ async function enviarMovimiento(fila, columna, valor) {
 }
 
 /**
- * Nombre:
+ * Nombre: limpiarCasilla
  * 
- * Descripcion:
+ * Descripcion: Funcion para limpiar una casilla del tablero, siempre y cuando esta casilla no se una de las originales del tablero que se resolvera.
  * 
- * Entradas:
+ * Entradas: No posee.
  * 
- * Salidas:
+ * Salidas: No posee.
  * 
  */
 function limpiarCasilla() {
@@ -611,12 +612,12 @@ function limpiarCasilla() {
     console.log("Realizando eliminacion.");
 
     if (valor === 0) {
-        tableroVolatil[fila][columna] = 0; // Modificarla con un cero en esa posicion
+        tableroVolatil[fila - 1][columna - 1] = 0; // Modificarla con un cero en esa posicion
 
         sessionStorage.setItem("TableroVolatil", JSON.stringify(tableroVolatil)); // Volverla a guardar.
 
         // Limpiar esa casilla del tablero.
-        let celda = document.getElementById(`celda-${fila}-${columna}`);
+        let celda = document.getElementById(`celda-${fila - 1}-${columna - 1}`);
         celda.innerText = "";
 
         alert("Casilla limpiada.");
@@ -634,29 +635,29 @@ let tiempoInicio;
 let intervalo;
 
 /**
- * Nombre:
+ * Nombre: iniciarTemporizador
  * 
- * Descripcion:
+ * Descripcion: Funcion para iniciar el temporizador de la partida en juego.
  * 
- * Entradas:
+ * Entradas: No posee.
  * 
- * Salidas:
+ * Salidas: No posee.
  * 
  */
 function iniciarTemporizador() {
-    console.log("Temporizador iniciado");
+    //console.log("Temporizador iniciado");
     tiempoInicio = Date.now(); // Guardamos el tiempo de inicio
     intervalo = setInterval(actualizarTiempo, 1000);
 }
 
 /**
- * Nombre:
+ * Nombre: actualizarTiempo
  * 
- * Descripcion:
+ * Descripcion: Funcion para ir actualizando el temporizador en la interfaz.
  * 
- * Entradas:
+ * Entradas: No posee.
  * 
- * Salidas:
+ * Salidas: No posee.
  * 
  */
 function actualizarTiempo() {
@@ -670,13 +671,13 @@ function actualizarTiempo() {
 }
 
 /**
- * Nombre:
+ * Nombre: detenerTemporizador
  * 
- * Descripcion:
+ * Descripcion: Funcion para detener el temporizador de la partida y optener el tiempo optenido.
  * 
- * Entradas:
+ * Entradas: No posee.
  * 
- * Salidas:
+ * Salidas: El tiempo de duracion de la partida en segundos.
  * 
  */
 function detenerTemporizador() {
@@ -694,7 +695,7 @@ function detenerTemporizador() {
  * 
  * Descripcion: Funcion para enviar los datos de finalizacion de la partidad al controlador de la ventana.
  * 
- * Entradas:
+ * Entradas: string tipoFinalizacion: El tipo de finalizacion realizada, int duracion: Duracion de la partida.
  * 
  * Salidas: No posee.
  * 

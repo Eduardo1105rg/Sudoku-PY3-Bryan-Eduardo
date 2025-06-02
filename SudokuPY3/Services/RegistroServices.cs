@@ -47,9 +47,9 @@ namespace SudokuPY3.Services
          * 
          * Descripcion: Funcion encargada de guardar los datos funales de una partida cuando se termine y agregar la instancia actual de JuegoModel al historial.
          * 
-         * Entradas:
+         * Entradas: Los datos de finalizacion de una partida.
          * 
-         * Salidas:
+         * Salidas: No posee.
          * 
          */
         public void FinalizarPartida(string tipoFinalizacion, int cantSugerencias, int duracion, List<List<int>> ultimaMatriz)
@@ -70,13 +70,13 @@ namespace SudokuPY3.Services
 
 
         /**
-         * Nombre:
+         * Nombre: RegistrarDatosIniciales
          * 
-         * Descripcion:
+         * Descripcion: Funcion para registrar los datos iniciales de una partida.
          * 
-         * Entradas:
+         * Entradas: Los datos que se ocupan para registrar una partida.
          * 
-         * Salidas:
+         * Salidas: No posee.
          * 
          */
         public void RegistrarDatosIniciales(int celdasIngreso, List<List<int>> matrizOrigen, List<List<int>> matrizCeros)
@@ -95,13 +95,13 @@ namespace SudokuPY3.Services
 
 
         /**
-         * Nombre:
+         * Nombre: VerificacionesRealizadas
          * 
-         * Descripcion:
+         * Descripcion: Funcion para aumentar el numero de verificaciones realizadas.
          * 
-         * Entradas:
+         * Entradas: No posee.
          * 
-         * Salidas:
+         * Salidas: No posee.
          * 
          */
         public void VerificacionesRealizadas()
@@ -112,16 +112,16 @@ namespace SudokuPY3.Services
         }
 
         /**
-         * Nombre:
+         * Nombre: ErroresVerificacion
          * 
-         * Descripcion:
+         * Descripcion: Funcion para modificar la cantidad de errores que que se tiene actualmente en una partida.
          * 
-         * Entradas:
+         * Entradas: int cantErrores: Cantidad de errores en una verificacion.
          * 
-         * Salidas:
+         * Salidas: No posee.
          * 
          */
-        public void ErroresVerificacion(int cantErrores) // Hay que definir como se contarian los errores de verificacion.
+        public void ErroresVerificacion(int cantErrores) 
         {
             juegoActual.SetErroresVerificacion(cantErrores);
 
@@ -129,13 +129,13 @@ namespace SudokuPY3.Services
         }
 
         /**
-         * Nombre:
+         * Nombre: ReinicarDatosJuego
          * 
-         * Descripcion:
+         * Descripcion: Funcion para llamar a la funcion que reiniciara ciertos valores de la clase JuegoModel.
          * 
-         * Entradas:
+         * Entradas: No posee.
          * 
-         * Salidas:
+         * Salidas: No posee.
          * 
          */
         public void ReinicarDatosJuego()
