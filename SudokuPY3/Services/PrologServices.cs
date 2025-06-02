@@ -81,11 +81,12 @@ namespace SudokuPY3.Services
          */
         public string EnviarConsulta(string consulta)
         {
-            IniciarProlog(); 
+            IniciarProlog();
 
             prolog.StandardInput.WriteLine(consulta);
             prolog.StandardInput.Flush();
 
+            System.Threading.Thread.Sleep(3000);
             return prolog.StandardOutput.ReadLine();
         }
 
@@ -110,13 +111,14 @@ namespace SudokuPY3.Services
         }
 
         /**
-         * Nombre:
+         * Nombre: ObtenerMatrizSudokuV2
          * 
-         * Descripcion:
+         * Descripcion: Funcion para solicitar el tablero de Sudoku a prolog.
          * 
-         * Entradas:
+         * Entradas: int tamano: Tamño de la matriz a crear.
          * 
-         * Salidas:
+         * Salidas: Los tableros de Sudoku generados para el juego actual, uno de esos tamblero contiene la solucion y el otro tiene elementos oculto que
+         * seran los que completara el usuario.
          * 
          */
         public List<List<List<int>>> ObtenerMatrizSudokuV2(int tamano)
@@ -145,7 +147,7 @@ namespace SudokuPY3.Services
             // Consultar para optener la ahora la matriz con ceros.
             string listaProlog = "[" + string.Join(",", listaSudoku) + "]";
             //Console.WriteLine ("Datos de la lista a enviar: " + listaProlog);
-    
+
 
             string consultaMatrizConCeros = $"pistas_en_matriz({listaProlog}, MatrizResulta), write(MatrizResulta), nl, halt.";
             string resultadoConsulta = EnviarConsulta(consultaMatrizConCeros);
@@ -172,7 +174,7 @@ namespace SudokuPY3.Services
 
             //this.MatrizDeCerosOriginal = matrizSudokuJuego;
 
-            
+
 
             // Ahora guardar los datos de las matrices iniciales en el servicio de registro
 
@@ -234,7 +236,7 @@ namespace SudokuPY3.Services
             string consultaVerificacion = $"verifica_posicion({fila}, {columna}, {valor}, {listaConCerosString}, Variable), write(Variable), nl, halt.";
             string respuestaVerificacion = EnviarConsulta(consultaVerificacion);
             //Console.WriteLine($"Verificación del movimiento: {respuestaVerificacion}");
- 
+
             // Verificar si es podible modificar esa posicion.
             if (respuestaVerificacion.Contains("true"))
             {

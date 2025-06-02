@@ -295,7 +295,7 @@ async function verSolucion() {
 
         // Desplegar el modal.
         document.getElementById("modal").style.display = "block";
-    }, 10000); 
+    }, 30000); 
 
     //// En esta parte iniciaria el proceso de guardar los datos de la partida.
 
