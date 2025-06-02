@@ -631,8 +631,8 @@ function limpiarCasilla() {
 
 
 
-let tiempoInicio;
-let intervalo;
+let tiempoInicio; // Para guardar el temporizador.
+let intervalo; // Definir intervalos.
 
 /**
  * Nombre: iniciarTemporizador
