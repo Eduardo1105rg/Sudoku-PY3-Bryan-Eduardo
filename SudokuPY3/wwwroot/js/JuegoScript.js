@@ -666,8 +666,8 @@ function actualizarTiempo() {
         return;
     }
 
-    let tiempoActual = Math.floor((Date.now() - tiempoInicio) / 1000); // 🔹 Calculamos la diferencia en segundos
-    document.getElementById("temporizador").innerText = `Tiempo: ${tiempoActual} s`;
+    let tiempoActual = Math.floor((Date.now() - tiempoInicio) / 1000); 
+    document.getElementById("temporizador").innerText = `Tiempo de la partida: ${tiempoActual} s`;
 }
 
 /**
@@ -682,7 +682,7 @@ function actualizarTiempo() {
  */
 function detenerTemporizador() {
     clearInterval(intervalo); // Detener el temporizador
-    let tiempoTotal = Math.floor((Date.now() - tiempoInicio) / 1000); // Obtener duración total
+    let tiempoTotal = Math.floor((Date.now() - tiempoInicio) / 1000); // Obtener duracion total
     sessionStorage.setItem("TiempoDuracion", tiempoTotal);
     console.log("Tiempo total de juego:", tiempoTotal, "segundos");
 

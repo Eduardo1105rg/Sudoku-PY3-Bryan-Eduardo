@@ -19,8 +19,10 @@
             <div>
                 <p>Presiona el boton de abajo para ir a revisar el historial de las partidas jugadas.</p>
             </div>
+
             <div class="contenedor-redireccion">
-                @* <router-link class="redireccion-btn" to="/estadisticas">Historial</router-link> *@
+                @* <router-link  to="/estadisticas">Historial</router-link> *@
+                <a class="redireccion-a" asp-controller="Estadisticas" asp-action="Estadisticas">Estadisticas</a>
             </div>
             <!-- <form action="/verHistorial" method="post">
                 <button type="submit">Ver historial</button>
@@ -36,20 +38,23 @@
             <div>
                 <!--Informacion general del juego-->
                 <h2>Aspectos importantes</h2>
-                <ul>
-                    <li>
-                        En el juego de ahorcado se tendran dos jugadores compiendo por turnos, cada jugador devera de seleccionar una letra, con la que crean que se completara la palabra dada.
-                    </li>
-
-
+                
+                <ul class="info-lista-ul">
+                    <li>El Sudoku es un juego de lógica que se juega en un tablero dividido en una cuadrícula de 9x9.</li>
+                    <li>El objetivo del juego es llenar todas las casillas vacías con números del 1 al 9 sin repetir en ninguna fila, columna o subcuadrícula de 3x3.</li>
+                    <li>Existen diferentes niveles de dificultad, desde principiante hasta experto, dependiendo de la cantidad de números dados al inicio.</li>
+                    <li>Se pueden realizar verificaciones para comprobar si un número ingresado es válido en una casilla específica.</li>
+                    <li>Si se cometen errores, el sistema puede llevar un registro de estos para ayudar en la mejora del jugador.</li>
+                    <li>El juego puede finalizar de tres maneras: completando el Sudoku correctamente, abandonando la partida o utilizando la autosolución.</li>
                 </ul>
+       
 
             </div>
 
             <div class="contenedor-redireccion">
 
                 @* <router-link class="redireccion-btn" to="/juego">Juego</router-link> *@
-                <a asp-controller="Juego" asp-action="Juego">Jugar</a>
+                <a class="redireccion-a" asp-controller="Juego" asp-action="Juego">Jugar</a>
             </div>
 
 
