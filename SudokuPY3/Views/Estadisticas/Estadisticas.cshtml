@@ -1,0 +1,29 @@
+﻿@{
+
+}
+@model List<SudokuPY3.Models.JuegoModel>
+
+<link href="~/css/estadisticasstyles.css" rel="stylesheet" />
+
+
+<div class="div-principal">
+
+
+    <h1 style="text-align:center;">Historial de Partidas</h1>
+
+    <div class="contenedor">
+        @foreach (var partida in Model)
+        {
+            <div class="recuadro">
+                <h3>Partida</h3>
+                <p><strong>Celdas por completar: </strong> @partida.CeldasIngreso</p>
+                <p><strong>Verificaciones: </strong> @partida.Verificaciones</p>
+                <p><strong>Errores de verificacion: </strong> @partida.ErroresVerificacion</p>
+                <p><strong>Sugerencias Usadas:</strong> @partida.SugerenciasUsadas</p>
+                <p><strong>Tipo de Finalización:</strong> @partida.TipoFinalizacion</p>
+                <p><strong>Duración:</strong> @partida.Duracion segundos</p>
+            </div>
+        }
+    </div>
+
+</div>

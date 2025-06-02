@@ -1,0 +1,12 @@
+/Sudoku-Web-APP-PY3/obj
+/Sudoku-Web-APP-PY3/.vs
+/Sudoku-Web-APP-PY3/bin
+Sudoku-Web-APP-PY3/Sudoku-Web-APP-PY3.csproj.user
+
+# Los de firebase studio.
+.idx/dev.nix
+.vscode/settings.json
+/SudokuPY3/obj
+SudokuPY3/SudokuPY3.csproj.user
+/SudokuPY3/.vs
+/SudokuPY3/bin
